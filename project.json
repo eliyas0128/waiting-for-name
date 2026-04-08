@@ -1,0 +1,21 @@
+{
+  "overview": "A professional website for Perfect Designing Hub (PDH), an ISO 9001:2015 certified engineering consultancy based in Bhilai, India. Features all 8 sections from the company profile, sticky table of contents, chatbot, WhatsApp integration, and an embedded office map.",
+  "features": [
+    "8-section company profile website",
+    "Sticky table of contents sidebar with active section tracking",
+    "Built-in chatbot with Q&A about services and company info",
+    "WhatsApp floating button for quick contact",
+    "Embedded OpenStreetMap for office location in Bhilai",
+    "Professional teal/navy branding with ISO certification highlights",
+    "Responsive layout for mobile, tablet, and desktop"
+  ],
+  "category": "business",
+  "tags": [
+    "engineering",
+    "consultancy",
+    "corporate",
+    "website",
+    "india"
+  ],
+  "last_updated": "2026-04-08T14:00:00.579Z"
+}
