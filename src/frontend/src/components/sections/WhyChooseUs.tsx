@@ -74,7 +74,7 @@ export function WhyChooseUs() {
 
       {/* Vision & Mission */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
-        <div className="bg-navy rounded-xl p-6 relative overflow-hidden">
+        <div className="bg-accent-teal/10 border border-accent-teal/30 rounded-xl p-6 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-accent-teal/10 rounded-full -translate-y-1/2 translate-x-1/2" />
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-3">
@@ -83,7 +83,7 @@ export function WhyChooseUs() {
                 Our Vision
               </span>
             </div>
-            <p className="font-body text-sm text-inverse/80 leading-relaxed">
+            <p className="font-body text-sm text-foreground leading-relaxed">
               To be a globally recognized engineering consultancy renowned for
               innovation, quality, and customer-centric solutions that build a
               better world.

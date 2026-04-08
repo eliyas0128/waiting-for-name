@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { COMPANY_CONTACT, TOC_ITEMS } from "@/types/index";
-import { ChevronUp, Mail, MapPin, Menu, Phone, X } from "lucide-react";
+import { Award, ChevronUp, Mail, MapPin, Menu, Phone, X } from "lucide-react";
 import { useState } from "react";
 
 const NAV_LINKS = [
@@ -9,7 +9,6 @@ const NAV_LINKS = [
   { href: "#services", label: "Services" },
   { href: "#projects", label: "Projects" },
   { href: "#case-studies", label: "Case Studies" },
-  { href: "#quality-policy", label: "Quality" },
 ];
 
 function scrollToSection(id: string) {
@@ -266,7 +265,31 @@ export function Layout({ children }: LayoutProps) {
               </div>
             </div>
           </div>
-          <div className="border-t border-inverse/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-inverse/40">
+          <div className="border-t border-inverse/10 pt-5 pb-4">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+              <div className="flex items-center gap-1.5 text-accent-teal text-xs font-body font-semibold">
+                <Award size={14} />
+                <span>ISO 9001:2015 Certified</span>
+              </div>
+              <span className="text-inverse/20 hidden sm:inline">|</span>
+              <span className="text-inverse/50 text-xs font-body">
+                EPF Registered
+              </span>
+              <span className="text-inverse/20 hidden sm:inline">|</span>
+              <span className="text-inverse/50 text-xs font-body">
+                ESIC Registered
+              </span>
+              <span className="text-inverse/20 hidden sm:inline">|</span>
+              <span className="text-inverse/50 text-xs font-body">
+                MSME Registered
+              </span>
+              <span className="text-inverse/20 hidden sm:inline">|</span>
+              <span className="text-inverse/50 text-xs font-body">
+                Coal India Approved
+              </span>
+            </div>
+          </div>
+          <div className="border-t border-inverse/10 pt-4 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-inverse/40">
             <span>
               © {new Date().getFullYear()} PDH Tech Consultancy. All rights
               reserved.
@@ -289,7 +312,7 @@ export function Layout({ children }: LayoutProps) {
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-28 right-5 z-40 w-10 h-10 bg-navy border border-accent-teal/40 rounded-full flex items-center justify-center text-accent-teal hover:bg-primary/20 transition-smooth shadow-elevated"
+          className="fixed bottom-20 right-5 z-40 w-10 h-10 bg-navy border border-accent-teal/40 rounded-full flex items-center justify-center text-accent-teal hover:bg-primary/20 transition-smooth shadow-elevated"
           aria-label="Back to top"
           data-ocid="back-to-top"
         >

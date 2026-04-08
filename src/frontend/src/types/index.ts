@@ -68,8 +68,8 @@ export const TOC_ITEMS: TocItem[] = [
   { id: "services", label: "Services" },
   { id: "projects", label: "Projects" },
   { id: "case-studies", label: "Case Studies" },
-  { id: "quality-policy", label: "Quality Policy" },
   { id: "sister-company", label: "Sister Company" },
   { id: "fleet", label: "Fleet of Machines" },
+  { id: "gallery", label: "Gallery", icon: "🖼️" },
   { id: "feedback", label: "Feedback" },
 ];

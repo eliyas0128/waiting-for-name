@@ -163,22 +163,22 @@ export function ChatBot() {
 
   return (
     <>
-      {/* Chat toggle button */}
+      {/* Chat toggle button — aligned left of WhatsApp button at same bottom level */}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="fixed bottom-5 right-20 z-50 w-13 h-13 w-12 h-12 bg-primary text-primary-foreground rounded-full shadow-elevated flex items-center justify-center hover:bg-primary/90 transition-smooth"
+        className="fixed bottom-5 right-[4.5rem] z-50 w-12 h-12 bg-primary text-primary-foreground rounded-full shadow-elevated flex items-center justify-center hover:bg-primary/90 transition-smooth"
         aria-label={open ? "Close chat assistant" : "Open chat assistant"}
         data-ocid="chatbot-toggle"
       >
         {open ? <X size={20} /> : <MessageCircle size={20} />}
       </button>
 
-      {/* Chat window */}
+      {/* Chat window — opens above the toggle button */}
       {open && (
         <dialog
           open
-          className="fixed bottom-20 right-4 z-50 w-80 sm:w-96 bg-card border border-border rounded-2xl shadow-elevated flex flex-col overflow-hidden p-0 m-0"
+          className="fixed bottom-[4.5rem] right-4 z-50 w-80 sm:w-96 bg-card border border-border rounded-2xl shadow-elevated flex flex-col overflow-hidden p-0 m-0"
           style={{ maxHeight: "70vh" }}
           aria-label="PDH Chat Assistant"
         >

@@ -1,5 +1,16 @@
+import { Button } from "@/components/ui/button";
 import { COMPANY_CONTACT } from "@/types/index";
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import {
+  Clock,
+  ExternalLink,
+  Mail,
+  MapPin,
+  Navigation,
+  Phone,
+} from "lucide-react";
+
+const DIRECTIONS_URL =
+  "https://www.google.com/maps/dir/?api=1&destination=Perfect+Designing+Hub,Bhilai,Chhattisgarh+490023,India";
 
 export function ContactMap() {
   return (
@@ -112,12 +123,31 @@ export function ContactMap() {
 
         {/* Map */}
         <div className="lg:col-span-3">
-          <div className="bg-card border border-border rounded-xl overflow-hidden shadow-card h-full min-h-64">
-            <div className="px-5 py-4 border-b border-border flex items-center gap-2">
-              <MapPin size={15} className="text-accent-teal" />
-              <span className="font-body font-semibold text-sm text-foreground">
-                Bhilai, Chhattisgarh, India
-              </span>
+          <div className="bg-card border border-border rounded-xl overflow-hidden shadow-card h-full min-h-64 flex flex-col">
+            {/* Map header with Get Directions */}
+            <div className="px-5 py-4 border-b border-border flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center gap-2">
+                <MapPin size={15} className="text-accent-teal" />
+                <span className="font-body font-semibold text-sm text-foreground">
+                  Bhilai, Chhattisgarh, India
+                </span>
+              </div>
+              <Button
+                asChild
+                size="sm"
+                data-ocid="contact-get-directions-btn"
+                className="gap-2 font-body font-semibold text-xs"
+              >
+                <a
+                  href={DIRECTIONS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Navigation size={13} />
+                  Get Directions
+                  <ExternalLink size={12} />
+                </a>
+              </Button>
             </div>
             <iframe
               src="https://www.openstreetmap.org/export/embed.html?bbox=81.36,21.19,81.44,21.23&layer=mapnik&marker=21.209,81.396"
