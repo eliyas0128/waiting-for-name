@@ -4,6 +4,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { CaseStudies } from "@/components/sections/CaseStudies";
 import { CompanyProfile } from "@/components/sections/CompanyProfile";
 import { ContactMap } from "@/components/sections/ContactMap";
+import { FeedbackSection } from "@/components/sections/Feedback";
 import { Projects } from "@/components/sections/Projects";
 import { QualityPolicy } from "@/components/sections/QualityPolicy";
 import { Services } from "@/components/sections/Services";
@@ -22,6 +23,7 @@ export default function Home() {
       <CaseStudies />
       <QualityPolicy />
       <SisterCompany />
+      <FeedbackSection />
       <ContactMap />
 
       {/* Floating widgets */}

@@ -1,2 +1,12 @@
+type Feedback = 
+ record {
+   email: text;
+   id: nat;
+   message: text;
+   name: text;
+   timestamp: int;
+ };
 service : {
+  getFeedbacks: () -> (vec Feedback) query;
+  submitFeedback: (name: text, email: text, message: text) -> ();
 }

@@ -1,4 +1,14 @@
 // Version: 1.0.0
+type Feedback__217957820 =
+  {email : Text; id : Nat; message : Text; name : Text; timestamp : Int};
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
 actor {
-  
+  stable feedbacks :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Feedback__217957820]];
+      var elementIndex : Nat__490723111
+    };
+  stable var nextId : Nat
 };

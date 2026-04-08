@@ -46,6 +46,14 @@ export interface ContactInfo {
   address: string;
 }
 
+export interface Feedback {
+  id: bigint;
+  name: string;
+  email: string;
+  message: string;
+  timestamp: bigint;
+}
+
 export const COMPANY_CONTACT: ContactInfo = {
   phone: "+91 78690-91028",
   email: "pdh.tech.consultancy@gmail.com",
@@ -62,4 +70,6 @@ export const TOC_ITEMS: TocItem[] = [
   { id: "case-studies", label: "Case Studies" },
   { id: "quality-policy", label: "Quality Policy" },
   { id: "sister-company", label: "Sister Company" },
+  { id: "fleet", label: "Fleet of Machines" },
+  { id: "feedback", label: "Feedback" },
 ];
