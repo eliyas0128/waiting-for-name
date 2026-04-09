@@ -122,6 +122,8 @@ const SERVICES: ServiceDetail[] = [
   },
 ];
 
+const INITIAL_VISIBLE = 3;
+
 function ServiceCard({ service }: { service: ServiceDetail }) {
   const [open, setOpen] = useState(false);
 
@@ -172,6 +174,11 @@ function ServiceCard({ service }: { service: ServiceDetail }) {
 }
 
 export function Services() {
+  const [showAll, setShowAll] = useState(false);
+  const visibleServices = showAll
+    ? SERVICES
+    : SERVICES.slice(0, INITIAL_VISIBLE);
+
   return (
     <section id="services" className="scroll-mt-24 mb-16">
       <div className="mb-8">
@@ -188,9 +195,30 @@ export function Services() {
       </div>
 
       <div className="flex flex-col gap-3">
-        {SERVICES.map((service) => (
+        {visibleServices.map((service) => (
           <ServiceCard key={service.id} service={service} />
         ))}
+      </div>
+
+      <div className="mt-5 flex justify-center">
+        <button
+          type="button"
+          data-ocid="services-view-toggle"
+          onClick={() => setShowAll((v) => !v)}
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-teal-600 text-white font-body font-semibold text-sm shadow-md hover:bg-teal-700 active:bg-teal-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
+        >
+          {showAll ? (
+            <>
+              <ChevronUp size={16} />
+              View Less
+            </>
+          ) : (
+            <>
+              <ChevronDown size={16} />
+              View More ({SERVICES.length - INITIAL_VISIBLE} more)
+            </>
+          )}
+        </button>
       </div>
     </section>
   );

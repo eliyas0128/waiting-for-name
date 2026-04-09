@@ -63,7 +63,7 @@ export function Layout({ children }: LayoutProps) {
             type="button"
             onClick={() => scrollToSection("company-profile")}
             className="flex items-center gap-3 group"
-            aria-label="PDH Tech Consultancy – go to top"
+            aria-label="Perfect Solution – go to top"
           >
             <div className="w-10 h-10 bg-navy rounded-sm flex items-center justify-center text-inverse font-display font-bold text-lg leading-none relative overflow-hidden">
               <span className="relative z-10">P</span>
@@ -71,10 +71,10 @@ export function Layout({ children }: LayoutProps) {
             </div>
             <div className="leading-tight">
               <div className="font-display font-bold text-foreground text-base group-hover:text-accent-teal transition-colors">
-                PDH
+                Perfect
               </div>
               <div className="text-muted-foreground text-[10px] font-body tracking-wide uppercase">
-                Tech Consultancy
+                Solution
               </div>
             </div>
           </button>
@@ -209,10 +209,10 @@ export function Layout({ children }: LayoutProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             <div>
               <div className="font-display font-bold text-xl mb-2 text-accent-teal">
-                PDH
+                Perfect
               </div>
               <div className="text-sm text-inverse/70 font-body mb-3">
-                Tech Consultancy
+                Solution
               </div>
               <p className="text-xs text-inverse/50 leading-relaxed">
                 ISO certified engineering and strategic consultancy. 8+ years
@@ -291,7 +291,7 @@ export function Layout({ children }: LayoutProps) {
           </div>
           <div className="border-t border-inverse/10 pt-4 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-inverse/40">
             <span>
-              © {new Date().getFullYear()} PDH Tech Consultancy. All rights
+              © {new Date().getFullYear()} Perfect Solution. All rights
               reserved.
             </span>
             <span>

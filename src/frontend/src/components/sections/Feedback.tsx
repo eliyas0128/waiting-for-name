@@ -171,8 +171,8 @@ export function FeedbackSection() {
           Share Your Opinion
         </h2>
         <p className="font-body text-sm text-muted-foreground max-w-lg">
-          We value your thoughts. Tell us about your experience with PDH Tech
-          Consultancy — your feedback helps us improve.
+          We value your thoughts. Tell us about your experience with Perfect
+          Solution — your feedback helps us improve.
         </p>
       </div>
 
@@ -244,7 +244,7 @@ export function FeedbackSection() {
                 </Label>
                 <Textarea
                   id="fb-message"
-                  placeholder="Share your experience with PDH Tech Consultancy..."
+                  placeholder="Share your experience with Perfect Solution..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required

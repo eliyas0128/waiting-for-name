@@ -153,8 +153,8 @@ export function ContactMap() {
               src="https://www.openstreetmap.org/export/embed.html?bbox=81.36,21.19,81.44,21.23&layer=mapnik&marker=21.209,81.396"
               style={{ width: "100%", height: "350px", border: 0 }}
               loading="lazy"
-              title="PDH Tech Consultancy Location – Bhilai, Chhattisgarh"
-              aria-label="Map showing PDH Tech Consultancy office location in Bhilai"
+              title="Perfect Solution Location – Bhilai, Chhattisgarh"
+              aria-label="Map showing Perfect Solution office location in Bhilai"
             />
           </div>
         </div>

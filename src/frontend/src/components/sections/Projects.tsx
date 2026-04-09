@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Tag, User } from "lucide-react";
+import { ChevronDown, ChevronUp, MapPin, Tag, User } from "lucide-react";
+import { useState } from "react";
 
 const PROJECTS = [
   {
@@ -55,6 +56,8 @@ const PROJECTS = [
   },
 ];
 
+const INITIAL_VISIBLE = 3;
+
 const CATEGORY_COLORS: Record<string, string> = {
   "Project Management": "bg-blue-100 text-blue-700 border-blue-200",
   "Feasibility Study": "bg-green-100 text-green-700 border-green-200",
@@ -64,6 +67,12 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export function Projects() {
+  const [showAll, setShowAll] = useState(false);
+  const visibleProjects = showAll
+    ? PROJECTS
+    : PROJECTS.slice(0, INITIAL_VISIBLE);
+  const remaining = PROJECTS.length - INITIAL_VISIBLE;
+
   return (
     <section id="projects" className="scroll-mt-24 mb-16">
       <div className="mb-8">
@@ -80,7 +89,7 @@ export function Projects() {
       </div>
 
       <div className="flex flex-col gap-5">
-        {PROJECTS.map((project, index) => (
+        {visibleProjects.map((project, index) => (
           <div
             key={project.id}
             className="bg-card border border-border rounded-xl p-6 shadow-card hover:shadow-elevated transition-smooth group"
@@ -127,6 +136,29 @@ export function Projects() {
           </div>
         ))}
       </div>
+
+      {PROJECTS.length > INITIAL_VISIBLE && (
+        <div className="mt-5 flex justify-center">
+          <button
+            type="button"
+            data-ocid="projects-view-toggle"
+            onClick={() => setShowAll((v) => !v)}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-teal-600 text-white font-body font-semibold text-sm shadow-md hover:bg-teal-700 active:bg-teal-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
+          >
+            {showAll ? (
+              <>
+                <ChevronUp size={16} />
+                View Less
+              </>
+            ) : (
+              <>
+                <ChevronDown size={16} />
+                View More ({remaining} more)
+              </>
+            )}
+          </button>
+        </div>
+      )}
     </section>
   );
 }

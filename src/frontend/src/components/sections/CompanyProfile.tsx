@@ -1,5 +1,7 @@
+import { RentMachineModal } from "@/components/RentMachineModal";
 import { Badge } from "@/components/ui/badge";
-import { Award, Briefcase, Calendar, Users } from "lucide-react";
+import { Award, Briefcase, Calendar, Truck, Users } from "lucide-react";
+import { useState } from "react";
 
 const STATS = [
   {
@@ -29,6 +31,8 @@ const STATS = [
 ];
 
 export function CompanyProfile() {
+  const [rentOpen, setRentOpen] = useState(false);
+
   return (
     <section id="company-profile" className="scroll-mt-24 mb-16">
       {/* Hero Banner */}
@@ -51,13 +55,13 @@ export function CompanyProfile() {
           </div>
 
           <h1 className="font-display text-3xl md:text-5xl font-bold text-inverse leading-tight mb-4 max-w-2xl">
-            PDH Tech
+            Perfect
             <br />
-            <span className="text-accent-teal">Consultancy</span>
+            <span className="text-accent-teal">Solution</span>
           </h1>
           <p className="font-body text-lg text-inverse/70 max-w-xl leading-relaxed mb-8">
-            Your completing design with engineering partner — delivering
-            precision engineering and strategic consultancy since 2018.
+            Your complete design and engineering partner — delivering precision
+            engineering and strategic consultancy since 2018.
           </p>
 
           <div className="flex flex-wrap gap-3">
@@ -84,6 +88,28 @@ export function CompanyProfile() {
               data-ocid="hero-projects-cta"
             >
               View Projects
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                document
+                  .getElementById("fleet")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="px-6 py-2.5 bg-teal-600 text-white rounded-lg font-body font-semibold text-sm hover:bg-teal-700 transition-smooth flex items-center gap-2 shadow-lg"
+              data-ocid="hero-rent-vehicle-cta"
+            >
+              <Truck size={16} />
+              Rent Machines
+            </button>
+            <button
+              type="button"
+              onClick={() => setRentOpen(true)}
+              className="px-6 py-2.5 bg-accent-teal text-navy rounded-lg font-body font-semibold text-sm hover:bg-accent-teal/90 transition-smooth flex items-center gap-2 shadow-lg"
+              data-ocid="hero-rent-machine-cta"
+            >
+              <Truck size={16} />
+              Rent a Machine
             </button>
           </div>
         </div>
@@ -116,13 +142,13 @@ export function CompanyProfile() {
       {/* About blurb */}
       <div className="bg-card border border-border rounded-xl p-6 shadow-card">
         <h2 className="font-display font-bold text-xl text-foreground mb-3">
-          About PDH Tech Consultancy
+          About Perfect Solution
         </h2>
         <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">
-          PDH Tech Consultancy is a premier engineering and strategic
-          consultancy firm based in Bhilai, Chhattisgarh, India. Founded in 2018
-          with a commitment to excellence, we provide comprehensive solutions
-          across civil, structural, mechanical, and infrastructure domains.
+          Perfect Solution is a premier engineering and strategic consultancy
+          firm based in Bhilai, Chhattisgarh, India. Founded in 2018 with a
+          commitment to excellence, we provide comprehensive solutions across
+          civil, structural, mechanical, and infrastructure domains.
         </p>
         <p className="font-body text-sm text-muted-foreground leading-relaxed">
           Our team of 10+ experienced professionals has successfully delivered
@@ -131,6 +157,9 @@ export function CompanyProfile() {
           uphold the highest standards of quality in every engagement.
         </p>
       </div>
+
+      {/* Rent Machine Modal */}
+      <RentMachineModal open={rentOpen} onClose={() => setRentOpen(false)} />
     </section>
   );
 }
