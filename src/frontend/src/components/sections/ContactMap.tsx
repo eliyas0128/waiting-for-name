@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 const DIRECTIONS_URL =
-  "https://www.google.com/maps/dir/?api=1&destination=Perfect+Designing+Hub,Bhilai,Chhattisgarh+490023,India";
+  "https://www.google.com/maps/dir/?api=1&destination=2nd+floor+tiranga+bhawan+junwani+Road+near+Aman+dhaba+bhilai+durg+CG+490023";
 
 export function ContactMap() {
   return (
@@ -150,11 +150,11 @@ export function ContactMap() {
               </Button>
             </div>
             <iframe
-              src="https://www.openstreetmap.org/export/embed.html?bbox=81.36,21.19,81.44,21.23&layer=mapnik&marker=21.209,81.396"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=81.368,21.203,81.408,21.222&layer=mapnik&marker=21.2124,81.3876"
               style={{ width: "100%", height: "350px", border: 0 }}
               loading="lazy"
-              title="Perfect Solution Location – Bhilai, Chhattisgarh"
-              aria-label="Map showing Perfect Solution office location in Bhilai"
+              title="Perfect Designing Hub Location – Junwani Road, Bhilai"
+              aria-label="Map showing Perfect Designing Hub office location on Junwani Road, Bhilai"
             />
           </div>
         </div>

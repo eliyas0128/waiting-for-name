@@ -1,8 +1,11 @@
 import Time "mo:core/Time";
 import List "mo:core/List";
-import Array "mo:core/Array";
+import Map "mo:core/Map";
+import ProjectsMixin "mixins/projects-api";
+import Types "types/projects";
 
 actor {
+  // --- Feedback state (unchanged) ---
   public type Feedback = {
     id : Nat;
     name : Text;
@@ -29,4 +32,8 @@ actor {
   public query func getFeedbacks() : async [Feedback] {
     feedbacks.reverse().toArray();
   };
+
+  // --- Projects state ---
+  let projectsStore : Map.Map<Nat, Types.ProjectItem> = Map.empty<Nat, Types.ProjectItem>();
+  include ProjectsMixin(projectsStore);
 };

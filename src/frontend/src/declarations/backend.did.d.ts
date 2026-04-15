@@ -17,8 +17,24 @@ export interface Feedback {
   'message' : string,
   'timestamp' : bigint,
 }
+export interface ProjectItem {
+  'id' : bigint,
+  'client' : string,
+  'photoUrls' : Array<string>,
+  'name' : string,
+  'createdAt' : bigint,
+  'year' : string,
+  'description' : string,
+  'location' : string,
+}
 export interface _SERVICE {
+  'createProject' : ActorMethod<
+    [string, string, string, string, string, Array<string>],
+    ProjectItem
+  >,
+  'deleteProject' : ActorMethod<[bigint], boolean>,
   'getFeedbacks' : ActorMethod<[], Array<Feedback>>,
+  'getProjects' : ActorMethod<[], Array<ProjectItem>>,
   'submitFeedback' : ActorMethod<[string, string, string], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;

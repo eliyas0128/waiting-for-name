@@ -85,7 +85,7 @@ export function CaseStudies() {
               Material Testing Laboratory
             </h3>
             <p className="font-body text-sm text-muted-foreground leading-relaxed">
-              Perfect Solution operates a Material Testing Laboratory in
+              Perfect Designing Hub operates a Material Testing Laboratory in
               Bangalore, currently in process for{" "}
               <span className="font-medium text-foreground">
                 NABL Accreditation

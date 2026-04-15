@@ -5,7 +5,7 @@ export function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-[#25D366] hover:bg-[#20bb5a] text-white rounded-full shadow-elevated px-4 py-2.5 font-body font-semibold text-sm transition-smooth"
-      aria-label="Chat with Perfect Solution on WhatsApp"
+      aria-label="Chat with Perfect Designing Hub on WhatsApp"
       data-ocid="whatsapp-button"
     >
       <svg

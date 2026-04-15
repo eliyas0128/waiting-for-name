@@ -1,3 +1,14 @@
+type ProjectItem = 
+ record {
+   client: text;
+   createdAt: int;
+   description: text;
+   id: nat;
+   location: text;
+   name: text;
+   photoUrls: vec text;
+   year: text;
+ };
 type Feedback = 
  record {
    email: text;
@@ -7,6 +18,10 @@ type Feedback =
    timestamp: int;
  };
 service : {
+  createProject: (name: text, description: text, client: text, location:
+   text, year: text, photoUrls: vec text) -> (ProjectItem);
+  deleteProject: (id: nat) -> (bool);
   getFeedbacks: () -> (vec Feedback) query;
+  getProjects: () -> (vec ProjectItem) query;
   submitFeedback: (name: text, email: text, message: text) -> ();
 }

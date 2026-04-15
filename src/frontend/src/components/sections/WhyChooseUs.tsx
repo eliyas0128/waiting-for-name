@@ -43,7 +43,7 @@ export function WhyChooseUs() {
           Why Choose Us
         </div>
         <h2 className="font-display font-bold text-2xl md:text-3xl text-foreground mb-3">
-          Why Perfect Solution?
+          Why Perfect Designing Hub?
         </h2>
         <p className="font-body text-sm text-muted-foreground max-w-lg">
           We combine multinational engineering expertise with personal

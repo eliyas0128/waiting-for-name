@@ -172,7 +172,7 @@ export function FeedbackSection() {
         </h2>
         <p className="font-body text-sm text-muted-foreground max-w-lg">
           We value your thoughts. Tell us about your experience with Perfect
-          Solution — your feedback helps us improve.
+          Designing Hub — your feedback helps us improve.
         </p>
       </div>
 
@@ -244,7 +244,7 @@ export function FeedbackSection() {
                 </Label>
                 <Textarea
                   id="fb-message"
-                  placeholder="Share your experience with Perfect Solution..."
+                  placeholder="Share your experience with Perfect Designing Hub..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required

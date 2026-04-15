@@ -26,6 +26,18 @@ export interface ProjectItem {
   description: string;
 }
 
+/** Unified display shape used in the Projects section UI */
+export interface DisplayProject {
+  id: string;
+  title: string;
+  client: string;
+  location: string;
+  year: string;
+  category: string;
+  description: string;
+  photos: string[];
+}
+
 export interface CaseStudy {
   title: string;
   challenge: string;
@@ -58,7 +70,7 @@ export const COMPANY_CONTACT: ContactInfo = {
   phone: "+91 78690-91028",
   email: "pdh.tech.consultancy@gmail.com",
   address:
-    "Plot No. 9A, Industrial State, Near Chhawni Chowk, Nandani Road, Bhilai, Durg - 490023, Chhattisgarh, India",
+    "2nd floor, tiranga bhawan, junwani Road, near Aman dhaba, bhilai, durg (C.G.)-490023",
 };
 
 export const TOC_ITEMS: TocItem[] = [
@@ -67,7 +79,6 @@ export const TOC_ITEMS: TocItem[] = [
   { id: "what-we-do", label: "What We Do" },
   { id: "services", label: "Services" },
   { id: "projects", label: "Projects" },
-  { id: "fleet", label: "Fleet of Machines" },
   { id: "case-studies", label: "Case Studies" },
   { id: "gallery", label: "Gallery", icon: "🖼️" },
   { id: "feedback", label: "Feedback" },

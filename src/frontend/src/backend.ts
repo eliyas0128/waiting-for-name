@@ -89,6 +89,16 @@ export class ExternalBlob {
         return this;
     }
 }
+export interface ProjectItem {
+    id: bigint;
+    client: string;
+    photoUrls: Array<string>;
+    name: string;
+    createdAt: bigint;
+    year: string;
+    description: string;
+    location: string;
+}
 export interface Feedback {
     id: bigint;
     name: string;
@@ -97,11 +107,42 @@ export interface Feedback {
     timestamp: bigint;
 }
 export interface backendInterface {
+    createProject(name: string, description: string, client: string, location: string, year: string, photoUrls: Array<string>): Promise<ProjectItem>;
+    deleteProject(id: bigint): Promise<boolean>;
     getFeedbacks(): Promise<Array<Feedback>>;
+    getProjects(): Promise<Array<ProjectItem>>;
     submitFeedback(name: string, email: string, message: string): Promise<void>;
 }
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
+    async createProject(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: Array<string>): Promise<ProjectItem> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createProject(arg0, arg1, arg2, arg3, arg4, arg5);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createProject(arg0, arg1, arg2, arg3, arg4, arg5);
+            return result;
+        }
+    }
+    async deleteProject(arg0: bigint): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteProject(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteProject(arg0);
+            return result;
+        }
+    }
     async getFeedbacks(): Promise<Array<Feedback>> {
         if (this.processError) {
             try {
@@ -113,6 +154,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getFeedbacks();
+            return result;
+        }
+    }
+    async getProjects(): Promise<Array<ProjectItem>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getProjects();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getProjects();
             return result;
         }
     }

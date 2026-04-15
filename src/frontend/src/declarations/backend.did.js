@@ -8,6 +8,16 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const ProjectItem = IDL.Record({
+  'id' : IDL.Nat,
+  'client' : IDL.Text,
+  'photoUrls' : IDL.Vec(IDL.Text),
+  'name' : IDL.Text,
+  'createdAt' : IDL.Int,
+  'year' : IDL.Text,
+  'description' : IDL.Text,
+  'location' : IDL.Text,
+});
 export const Feedback = IDL.Record({
   'id' : IDL.Nat,
   'name' : IDL.Text,
@@ -17,13 +27,30 @@ export const Feedback = IDL.Record({
 });
 
 export const idlService = IDL.Service({
+  'createProject' : IDL.Func(
+      [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Vec(IDL.Text)],
+      [ProjectItem],
+      [],
+    ),
+  'deleteProject' : IDL.Func([IDL.Nat], [IDL.Bool], []),
   'getFeedbacks' : IDL.Func([], [IDL.Vec(Feedback)], ['query']),
+  'getProjects' : IDL.Func([], [IDL.Vec(ProjectItem)], ['query']),
   'submitFeedback' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const ProjectItem = IDL.Record({
+    'id' : IDL.Nat,
+    'client' : IDL.Text,
+    'photoUrls' : IDL.Vec(IDL.Text),
+    'name' : IDL.Text,
+    'createdAt' : IDL.Int,
+    'year' : IDL.Text,
+    'description' : IDL.Text,
+    'location' : IDL.Text,
+  });
   const Feedback = IDL.Record({
     'id' : IDL.Nat,
     'name' : IDL.Text,
@@ -33,7 +60,14 @@ export const idlFactory = ({ IDL }) => {
   });
   
   return IDL.Service({
+    'createProject' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Vec(IDL.Text)],
+        [ProjectItem],
+        [],
+      ),
+    'deleteProject' : IDL.Func([IDL.Nat], [IDL.Bool], []),
     'getFeedbacks' : IDL.Func([], [IDL.Vec(Feedback)], ['query']),
+    'getProjects' : IDL.Func([], [IDL.Vec(ProjectItem)], ['query']),
     'submitFeedback' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
   });
 };
