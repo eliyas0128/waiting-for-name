@@ -1,6 +1,6 @@
-import { c as createLucideIcon, j as jsxRuntimeExports, A as Award, P as Phone, C as COMPANY_CONTACT, M as Mail, a as MapPin, B as Button, u as useQueryClient, r as reactExports, S as Skeleton, L as Link, b as ChevronUp } from "./index-rAAVCMgz.js";
-import { C as Calendar, B as Badge, u as useMutation, L as Label, I as Input, T as Textarea, a as ue, U as User } from "./index-B3_Q53bJ.js";
-import { u as useActor, a as useQuery, c as createActor } from "./backend-Cy4QAbrw.js";
+import { c as createLucideIcon, j as jsxRuntimeExports, A as Award, P as Phone, C as COMPANY_CONTACT, M as Mail, a as MapPin, B as Button, u as useNetworkStatusContext, b as useQueryClient, r as reactExports, S as Skeleton, L as Link, d as ChevronUp } from "./index-8XfmXAzJ.js";
+import { C as Calendar, B as Badge, u as useMutation, W as WifiOff, L as Label, I as Input, T as Textarea, a as ue, U as User } from "./index-BNo11_XK.js";
+import { u as useActor, a as useQuery, s as saveFeedback, b as addToSyncQueue, c as createActor, g as getFeedback, d as getProjects } from "./offlineStorage-PD1dFHmI.js";
 import { p as projectPhotosToGalleryItems, G as GALLERY_ITEMS } from "./gallery-BUORiAkH.js";
 /**
  * @license lucide-react v0.511.0 - ISC
@@ -336,7 +336,7 @@ function WhatsAppButton() {
       href: "https://wa.me/917869091028",
       target: "_blank",
       rel: "noopener noreferrer",
-      className: "fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-[#25D366] hover:bg-[#20bb5a] text-white rounded-full shadow-elevated px-4 py-2.5 font-body font-semibold text-sm transition-smooth",
+      className: "fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-whatsapp hover:bg-whatsapp/80 text-white rounded-full shadow-elevated px-4 py-2.5 font-body font-semibold text-sm transition-smooth",
       "aria-label": "Chat with Perfect Designing Hub on WhatsApp",
       "data-ocid": "whatsapp-button",
       children: [
@@ -611,7 +611,7 @@ function ContactMap() {
             href: "https://wa.me/917869091028",
             target: "_blank",
             rel: "noopener noreferrer",
-            className: "flex items-center gap-3 bg-[#25D366] hover:bg-[#20bb5a] text-white rounded-xl px-5 py-4 font-body font-semibold text-sm transition-smooth shadow-card",
+            className: "flex items-center gap-3 bg-whatsapp hover:bg-whatsapp/80 text-white rounded-xl px-5 py-4 font-body font-semibold text-sm transition-smooth shadow-card",
             "data-ocid": "contact-whatsapp",
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -744,35 +744,79 @@ function FeedbackCard({ fb }) {
 }
 function FeedbackSection() {
   const { actor, isFetching } = useActor(createActor);
+  const { isBackendReachable } = useNetworkStatusContext();
   const queryClient = useQueryClient();
   const [name, setName] = reactExports.useState("");
   const [email, setEmail] = reactExports.useState("");
   const [message, setMessage] = reactExports.useState("");
   const [rating, setRating] = reactExports.useState(5);
-  const { data: feedbacks = [], isLoading } = useQuery({
+  const { data: backendFeedbacks = [], isLoading } = useQuery({
     queryKey: ["feedbacks"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getFeedbacks();
     },
-    enabled: !!actor && !isFetching
+    enabled: !!actor && !isFetching && isBackendReachable
   });
+  const { data: offlineFeedbacks = [] } = useQuery({
+    queryKey: ["offline-feedbacks"],
+    queryFn: () => getFeedback().filter((f) => !f.synced)
+    // Always enabled — reads from localStorage only
+  });
+  const backendIds = new Set(backendFeedbacks.map((f) => String(f.id)));
+  const offlineOnly = offlineFeedbacks.filter((f) => !backendIds.has(f.id));
+  const offlineAsFeedback = offlineOnly.map((f) => ({
+    id: BigInt(0),
+    // placeholder — won't conflict since we key by f.id string
+    name: f.name,
+    email: f.email,
+    message: encodeMessage(5, f.message),
+    timestamp: BigInt(f.createdAt) * 1000000n
+  }));
+  const allFeedbacks = [...backendFeedbacks, ...offlineAsFeedback];
+  const clearForm = () => {
+    setName("");
+    setEmail("");
+    setMessage("");
+    setRating(5);
+  };
   const { mutate: submit, isPending } = useMutation({
     mutationFn: async () => {
-      if (!actor) throw new Error("Actor not ready");
-      await actor.submitFeedback(
-        name.trim(),
-        email.trim(),
-        encodeMessage(rating, message.trim())
-      );
+      if (isBackendReachable && actor) {
+        await actor.submitFeedback(
+          name.trim(),
+          email.trim(),
+          encodeMessage(rating, message.trim())
+        );
+      } else {
+        const offlineFb = {
+          id: crypto.randomUUID(),
+          name: name.trim(),
+          email: email.trim(),
+          message: message.trim(),
+          createdAt: Date.now(),
+          synced: false
+        };
+        saveFeedback(offlineFb);
+        addToSyncQueue({
+          id: crypto.randomUUID(),
+          type: "submitFeedback",
+          refId: offlineFb.id,
+          status: "pending",
+          retries: 0,
+          createdAt: Date.now()
+        });
+      }
     },
     onSuccess: () => {
-      ue.success("Thank you! Your feedback has been submitted.");
-      setName("");
-      setEmail("");
-      setMessage("");
-      setRating(5);
-      queryClient.invalidateQueries({ queryKey: ["feedbacks"] });
+      if (isBackendReachable && actor) {
+        ue.success("Thank you! Your feedback has been submitted.");
+        queryClient.invalidateQueries({ queryKey: ["feedbacks"] });
+      } else {
+        ue.success("Message saved — will be sent when you go online.");
+        queryClient.invalidateQueries({ queryKey: ["offline-feedbacks"] });
+      }
+      clearForm();
     },
     onError: () => {
       ue.error("Failed to submit feedback. Please try again.");
@@ -786,12 +830,24 @@ function FeedbackSection() {
     }
     submit();
   };
+  const isDisabled = isPending || isFetching;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { id: "feedback", className: "scroll-mt-24 mb-16", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-body font-semibold uppercase tracking-widest text-accent-teal mb-2", children: "Feedback" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-2xl md:text-3xl text-foreground mb-3", children: "Share Your Opinion" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-body text-sm text-muted-foreground max-w-lg", children: "We value your thoughts. Tell us about your experience with Perfect Designing Hub — your feedback helps us improve." })
     ] }),
+    !isBackendReachable && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: "flex items-center gap-2.5 bg-amber-500/10 border border-amber-500/30 rounded-lg px-4 py-3 mb-6 text-sm font-body",
+        "data-ocid": "feedback.offline_notice",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(WifiOff, { size: 15, className: "text-amber-600 shrink-0" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-amber-700 dark:text-amber-400", children: "You're currently offline. Your feedback will be saved and sent automatically when you reconnect." })
+        ]
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-5 gap-8", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "lg:col-span-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border border-border rounded-xl p-6 shadow-card sticky top-24", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-5", children: [
@@ -876,7 +932,7 @@ function FeedbackSection() {
             Button,
             {
               type: "submit",
-              disabled: isPending || isFetching,
+              disabled: isDisabled,
               className: "w-full font-body font-semibold gap-2",
               "data-ocid": "feedback-submit-btn",
               children: [
@@ -891,13 +947,13 @@ function FeedbackSection() {
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-1", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(ThumbsUp, { size: 15, className: "text-accent-teal" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-display font-bold text-base text-foreground", children: "What People Are Saying" }),
-          feedbacks.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "ml-auto text-xs bg-primary/10 text-accent-teal px-2.5 py-0.5 rounded-full font-body font-semibold", children: [
-            feedbacks.length,
+          allFeedbacks.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "ml-auto text-xs bg-primary/10 text-accent-teal px-2.5 py-0.5 rounded-full font-body font-semibold", children: [
+            allFeedbacks.length,
             " review",
-            feedbacks.length !== 1 ? "s" : ""
+            allFeedbacks.length !== 1 ? "s" : ""
           ] })
         ] }),
-        isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-4", children: [1, 2].map((i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        isLoading && isBackendReachable ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-4", children: [1, 2].map((i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
             className: "bg-card border border-border rounded-xl p-5",
@@ -914,7 +970,7 @@ function FeedbackSection() {
             ]
           },
           i
-        )) }) : feedbacks.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        )) }) : allFeedbacks.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "div",
           {
             className: "bg-card border border-dashed border-border rounded-xl p-10 text-center",
@@ -925,7 +981,13 @@ function FeedbackSection() {
               /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-body text-sm text-muted-foreground max-w-xs mx-auto", children: "Your opinion helps us grow. Share your experience and inspire others." })
             ]
           }
-        ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-4", children: feedbacks.map((fb) => /* @__PURE__ */ jsxRuntimeExports.jsx(FeedbackCard, { fb }, String(fb.id))) })
+        ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-4", children: allFeedbacks.map((fb, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+          FeedbackCard,
+          {
+            fb
+          },
+          fb.id === 0n ? `offline-${idx}` : String(fb.id)
+        )) })
       ] })
     ] })
   ] });
@@ -941,8 +1003,34 @@ function Gallery() {
     enabled: !!actor && !isFetching,
     throwOnError: false
   });
-  const projectGalleryItems = projectPhotosToGalleryItems(backendProjects);
-  const allItems = [...GALLERY_ITEMS, ...projectGalleryItems];
+  const { data: offlineGalleryItems = [] } = useQuery({
+    queryKey: ["offline-gallery-items"],
+    queryFn: () => {
+      const stored = getProjects();
+      const items = [];
+      for (const project of stored) {
+        project.photoUrls.forEach((url, index) => {
+          items.push({
+            id: `offline-project-${project.id}-photo-${index}`,
+            name: project.name,
+            qty: "",
+            imageUrl: url
+          });
+        });
+      }
+      return items;
+    }
+  });
+  const backendGalleryItems = projectPhotosToGalleryItems(backendProjects);
+  const backendUrls = new Set(backendGalleryItems.map((i) => i.imageUrl));
+  const deduplicatedOffline = offlineGalleryItems.filter(
+    (i) => !backendUrls.has(i.imageUrl)
+  );
+  const allItems = [
+    ...GALLERY_ITEMS,
+    ...backendGalleryItems,
+    ...deduplicatedOffline
+  ];
   const previewItems = allItems.slice(0, 6);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { id: "gallery", className: "scroll-mt-24 mb-16", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8", children: [
@@ -1221,7 +1309,32 @@ function Projects() {
     // Silently fall back to empty on error — hardcoded projects always show
     throwOnError: false
   });
-  const allProjects = [...HARDCODED_PROJECTS, ...backendProjects];
+  const { data: offlineProjects = [] } = useQuery({
+    queryKey: ["offline-projects"],
+    queryFn: () => {
+      const stored = getProjects();
+      const backendTitles = new Set(backendProjects.map((p) => p.title));
+      return stored.filter((p) => !p.synced && !backendTitles.has(p.name)).map(
+        (p) => ({
+          id: `offline-${p.id}`,
+          title: p.name,
+          client: p.client,
+          location: p.location,
+          category: "Project",
+          year: p.year,
+          description: p.description,
+          photos: p.photoUrls
+        })
+      );
+    },
+    // Rerun whenever backendProjects changes
+    enabled: true
+  });
+  const allProjects = [
+    ...HARDCODED_PROJECTS,
+    ...backendProjects,
+    ...offlineProjects
+  ];
   const visibleProjects = showAll ? allProjects : allProjects.slice(0, INITIAL_VISIBLE$1);
   const remaining = allProjects.length - INITIAL_VISIBLE$1;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { id: "projects", className: "scroll-mt-24 mb-16", children: [

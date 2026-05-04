@@ -1,5 +1,5 @@
-import { c as createLucideIcon, j as jsxRuntimeExports, B as Button, L as Link, S as Skeleton } from "./index-rAAVCMgz.js";
-import { u as useActor, a as useQuery, c as createActor } from "./backend-Cy4QAbrw.js";
+import { c as createLucideIcon, j as jsxRuntimeExports, B as Button, L as Link, S as Skeleton } from "./index-8XfmXAzJ.js";
+import { u as useActor, a as useQuery, c as createActor, d as getProjects } from "./offlineStorage-PD1dFHmI.js";
 import { p as projectPhotosToGalleryItems, G as GALLERY_ITEMS } from "./gallery-BUORiAkH.js";
 /**
  * @license lucide-react v0.511.0 - ISC
@@ -66,8 +66,34 @@ function GalleryPage() {
     enabled: !!actor && !isFetching,
     throwOnError: false
   });
+  const { data: offlineGalleryItems = [] } = useQuery({
+    queryKey: ["offline-gallery-items"],
+    queryFn: () => {
+      const stored = getProjects();
+      const items = [];
+      for (const project of stored) {
+        project.photoUrls.forEach((url, index) => {
+          items.push({
+            id: `offline-project-${project.id}-photo-${index}`,
+            name: project.name,
+            qty: "",
+            imageUrl: url
+          });
+        });
+      }
+      return items;
+    }
+  });
   const projectGalleryItems = projectPhotosToGalleryItems(backendProjects);
-  const allItems = [...GALLERY_ITEMS, ...projectGalleryItems];
+  const backendUrls = new Set(projectGalleryItems.map((i) => i.imageUrl));
+  const deduplicatedOffline = offlineGalleryItems.filter(
+    (i) => !backendUrls.has(i.imageUrl)
+  );
+  const allItems = [
+    ...GALLERY_ITEMS,
+    ...projectGalleryItems,
+    ...deduplicatedOffline
+  ];
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between gap-4 mb-8 flex-wrap", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 min-w-0", children: [
@@ -98,7 +124,8 @@ function GalleryPage() {
     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-body text-sm text-muted-foreground max-w-2xl mb-8", children: "A comprehensive visual catalogue of our machinery fleet — heavy civil earthmoving equipment to precision mechanical workshop machines, powering infrastructure projects across India." }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5", children: [
       GALLERY_ITEMS.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(GalleryCard, { item }, item.id)),
-      isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(GallerySkeletonGrid, {}) : projectGalleryItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(GalleryCard, { item }, item.id))
+      isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(GallerySkeletonGrid, {}) : projectGalleryItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(GalleryCard, { item }, item.id)),
+      deduplicatedOffline.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(GalleryCard, { item }, item.id))
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-10 pt-6 border-t border-border flex flex-wrap items-center justify-between gap-4", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-body text-muted-foreground", children: "Machinery fleet — Perfect Designing Hub, Bhilai, Chhattisgarh." }),

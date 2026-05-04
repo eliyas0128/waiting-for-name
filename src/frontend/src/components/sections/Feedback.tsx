@@ -4,10 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import type { Feedback } from "@/types/index";
+import { useNetworkStatusContext } from "@/context/NetworkStatusContext";
+import {
+  addToSyncQueue,
+  getFeedback,
+  saveFeedback,
+} from "@/lib/offlineStorage";
+import type { Feedback, OfflineFeedback } from "@/types/index";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { MessageSquare, Send, Star, ThumbsUp } from "lucide-react";
+import { MessageSquare, Send, Star, ThumbsUp, WifiOff } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -114,6 +120,7 @@ function FeedbackCard({ fb }: { fb: Feedback }) {
 
 export function FeedbackSection() {
   const { actor, isFetching } = useActor(createActor);
+  const { isBackendReachable } = useNetworkStatusContext();
   const queryClient = useQueryClient();
 
   const [name, setName] = useState("");
@@ -121,31 +128,84 @@ export function FeedbackSection() {
   const [message, setMessage] = useState("");
   const [rating, setRating] = useState(5);
 
-  const { data: feedbacks = [], isLoading } = useQuery<Feedback[]>({
+  // Backend feedbacks
+  const { data: backendFeedbacks = [], isLoading } = useQuery<Feedback[]>({
     queryKey: ["feedbacks"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getFeedbacks();
     },
-    enabled: !!actor && !isFetching,
+    enabled: !!actor && !isFetching && isBackendReachable,
   });
+
+  // Offline feedbacks (always read from localStorage)
+  const { data: offlineFeedbacks = [] } = useQuery<OfflineFeedback[]>({
+    queryKey: ["offline-feedbacks"],
+    queryFn: () => getFeedback().filter((f) => !f.synced),
+    // Always enabled — reads from localStorage only
+  });
+
+  // Build unified feedback list: backend first, then unsynced offline entries
+  const backendIds = new Set(backendFeedbacks.map((f) => String(f.id)));
+  const offlineOnly = offlineFeedbacks.filter((f) => !backendIds.has(f.id));
+
+  // Convert offline feedback to the Feedback display shape
+  const offlineAsFeedback: Feedback[] = offlineOnly.map((f) => ({
+    id: BigInt(0), // placeholder — won't conflict since we key by f.id string
+    name: f.name,
+    email: f.email,
+    message: encodeMessage(5, f.message),
+    timestamp: BigInt(f.createdAt) * 1_000_000n,
+  }));
+
+  const allFeedbacks: Feedback[] = [...backendFeedbacks, ...offlineAsFeedback];
+
+  const clearForm = () => {
+    setName("");
+    setEmail("");
+    setMessage("");
+    setRating(5);
+  };
 
   const { mutate: submit, isPending } = useMutation({
     mutationFn: async () => {
-      if (!actor) throw new Error("Actor not ready");
-      await actor.submitFeedback(
-        name.trim(),
-        email.trim(),
-        encodeMessage(rating, message.trim()),
-      );
+      if (isBackendReachable && actor) {
+        await actor.submitFeedback(
+          name.trim(),
+          email.trim(),
+          encodeMessage(rating, message.trim()),
+        );
+      } else {
+        // Save offline
+        const offlineFb: OfflineFeedback = {
+          id: crypto.randomUUID(),
+          name: name.trim(),
+          email: email.trim(),
+          message: message.trim(),
+          createdAt: Date.now(),
+          synced: false,
+        };
+        saveFeedback(offlineFb);
+        // Enqueue sync item
+        addToSyncQueue({
+          id: crypto.randomUUID(),
+          type: "submitFeedback",
+          refId: offlineFb.id,
+          status: "pending",
+          retries: 0,
+          createdAt: Date.now(),
+        });
+      }
     },
     onSuccess: () => {
-      toast.success("Thank you! Your feedback has been submitted.");
-      setName("");
-      setEmail("");
-      setMessage("");
-      setRating(5);
-      queryClient.invalidateQueries({ queryKey: ["feedbacks"] });
+      if (isBackendReachable && actor) {
+        toast.success("Thank you! Your feedback has been submitted.");
+        queryClient.invalidateQueries({ queryKey: ["feedbacks"] });
+      } else {
+        toast.success("Message saved — will be sent when you go online.");
+        queryClient.invalidateQueries({ queryKey: ["offline-feedbacks"] });
+      }
+      clearForm();
     },
     onError: () => {
       toast.error("Failed to submit feedback. Please try again.");
@@ -161,6 +221,8 @@ export function FeedbackSection() {
     submit();
   };
 
+  const isDisabled = isPending || isFetching;
+
   return (
     <section id="feedback" className="scroll-mt-24 mb-16">
       <div className="mb-8">
@@ -175,6 +237,20 @@ export function FeedbackSection() {
           Designing Hub — your feedback helps us improve.
         </p>
       </div>
+
+      {/* Offline notice */}
+      {!isBackendReachable && (
+        <div
+          className="flex items-center gap-2.5 bg-amber-500/10 border border-amber-500/30 rounded-lg px-4 py-3 mb-6 text-sm font-body"
+          data-ocid="feedback.offline_notice"
+        >
+          <WifiOff size={15} className="text-amber-600 shrink-0" />
+          <span className="text-amber-700 dark:text-amber-400">
+            You're currently offline. Your feedback will be saved and sent
+            automatically when you reconnect.
+          </span>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         {/* Form */}
@@ -256,7 +332,7 @@ export function FeedbackSection() {
 
               <Button
                 type="submit"
-                disabled={isPending || isFetching}
+                disabled={isDisabled}
                 className="w-full font-body font-semibold gap-2"
                 data-ocid="feedback-submit-btn"
               >
@@ -274,14 +350,15 @@ export function FeedbackSection() {
             <h3 className="font-display font-bold text-base text-foreground">
               What People Are Saying
             </h3>
-            {feedbacks.length > 0 && (
+            {allFeedbacks.length > 0 && (
               <span className="ml-auto text-xs bg-primary/10 text-accent-teal px-2.5 py-0.5 rounded-full font-body font-semibold">
-                {feedbacks.length} review{feedbacks.length !== 1 ? "s" : ""}
+                {allFeedbacks.length} review
+                {allFeedbacks.length !== 1 ? "s" : ""}
               </span>
             )}
           </div>
 
-          {isLoading ? (
+          {isLoading && isBackendReachable ? (
             <div className="flex flex-col gap-4">
               {[1, 2].map((i) => (
                 <div
@@ -300,7 +377,7 @@ export function FeedbackSection() {
                 </div>
               ))}
             </div>
-          ) : feedbacks.length === 0 ? (
+          ) : allFeedbacks.length === 0 ? (
             <div
               className="bg-card border border-dashed border-border rounded-xl p-10 text-center"
               data-ocid="feedback-empty-state"
@@ -318,8 +395,11 @@ export function FeedbackSection() {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              {feedbacks.map((fb) => (
-                <FeedbackCard key={String(fb.id)} fb={fb} />
+              {allFeedbacks.map((fb, idx) => (
+                <FeedbackCard
+                  key={fb.id === 0n ? `offline-${idx}` : String(fb.id)}
+                  fb={fb}
+                />
               ))}
             </div>
           )}

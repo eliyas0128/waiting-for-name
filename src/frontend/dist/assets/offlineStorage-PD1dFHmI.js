@@ -7,7 +7,7 @@ var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot
 var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
 var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
 var _client, _currentQuery, _currentQueryInitialState, _currentResult, _currentResultState, _currentResultOptions, _currentThenable, _selectError, _selectFn, _selectResult, _lastQueryWithDefinedData, _staleTimeoutId, _refetchIntervalId, _currentRefetchInterval, _trackedProps, _QueryObserver_instances, executeFetch_fn, updateStaleTimeout_fn, computeRefetchInterval_fn, updateRefetchInterval_fn, updateTimers_fn, clearStaleTimeout_fn, clearRefetchInterval_fn, updateQuery_fn, notify_fn, _a;
-import { q as ProtocolError, T as TimeoutWaitingForResponseErrorCode, t as utf8ToBytes, E as ExternalError, w as MissingRootKeyErrorCode, x as Certificate, y as lookupResultToBuffer, R as RequestStatusResponseStatus, U as UnknownError, z as RequestStatusDoneNoReplyErrorCode, D as RejectError, F as CertifiedRejectErrorCode, G as UNREACHABLE_ERROR, I as InputError, H as InvalidReadStateRequestErrorCode, J as ReadRequestType, K as Principal, N as IDL, O as MissingCanisterIdErrorCode, Q as HttpAgent, V as encode, W as QueryResponseStatus, Y as UncertifiedRejectErrorCode, Z as isV3ResponseBody, _ as isV2ResponseBody, $ as UncertifiedRejectUpdateErrorCode, a0 as UnexpectedErrorCode, a1 as decode, e as Subscribable, a2 as pendingThenable, a3 as resolveEnabled, s as shallowEqualObjects, a4 as resolveStaleTime, f as noop, a5 as environmentManager, a6 as isValidTimeout, a7 as timeUntilStale, a8 as timeoutManager, a9 as focusManager, aa as fetchState, ab as replaceData, n as notifyManager, r as reactExports, i as shouldThrowError, u as useQueryClient, d as useInternetIdentity, ac as createActorWithConfig, ad as Record, ae as Vec, af as Service, ag as Func, ah as Text, ai as Int, aj as Nat, ak as Bool } from "./index-rAAVCMgz.js";
+import { t as ProtocolError, T as TimeoutWaitingForResponseErrorCode, w as utf8ToBytes, E as ExternalError, x as MissingRootKeyErrorCode, y as Certificate, z as lookupResultToBuffer, R as RequestStatusResponseStatus, U as UnknownError, D as RequestStatusDoneNoReplyErrorCode, F as RejectError, G as CertifiedRejectErrorCode, H as UNREACHABLE_ERROR, I as InputError, J as InvalidReadStateRequestErrorCode, K as ReadRequestType, N as Principal, O as IDL, Q as MissingCanisterIdErrorCode, V as HttpAgent, W as encode, Y as QueryResponseStatus, Z as UncertifiedRejectErrorCode, _ as isV3ResponseBody, $ as isV2ResponseBody, a0 as UncertifiedRejectUpdateErrorCode, a1 as UnexpectedErrorCode, a2 as decode, f as Subscribable, a3 as pendingThenable, a4 as resolveEnabled, s as shallowEqualObjects, a5 as resolveStaleTime, i as noop, a6 as environmentManager, a7 as isValidTimeout, a8 as timeUntilStale, a9 as timeoutManager, aa as focusManager, ab as fetchState, ac as replaceData, n as notifyManager, r as reactExports, k as shouldThrowError, b as useQueryClient, e as useInternetIdentity, ad as createActorWithConfig, ae as Record, af as Vec, ag as Service, ah as Func, ai as Text, aj as Int, ak as Nat, al as Bool } from "./index-8XfmXAzJ.js";
 const FIVE_MINUTES_IN_MSEC = 5 * 60 * 1e3;
 function defaultStrategy() {
   return chain(conditionalDelay(once(), 1e3), backoff(1e3, 1.2), timeout(FIVE_MINUTES_IN_MSEC));
@@ -1220,8 +1220,83 @@ function createActor(canisterId, _uploadFile, _downloadFile, options = {}) {
   });
   return new Backend(actor, _uploadFile, _downloadFile, options.processError);
 }
+const PREFIX = "pdh_";
+const KEYS = {
+  projects: `${PREFIX}projects`,
+  feedback: `${PREFIX}feedback`,
+  syncQueue: `${PREFIX}sync_queue`
+};
+function readJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    return JSON.parse(raw);
+  } catch {
+    return fallback;
+  }
+}
+function writeJSON(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+function saveProject(project) {
+  const existing = getProjects();
+  const idx = existing.findIndex((p) => p.id === project.id);
+  if (idx >= 0) {
+    existing[idx] = project;
+  } else {
+    existing.push(project);
+  }
+  writeJSON(KEYS.projects, existing);
+}
+function getProjects() {
+  return readJSON(KEYS.projects, []);
+}
+function deleteProject(id) {
+  const filtered = getProjects().filter((p) => p.id !== id);
+  writeJSON(KEYS.projects, filtered);
+}
+function saveFeedback(feedback) {
+  const existing = getFeedback();
+  const idx = existing.findIndex((f) => f.id === feedback.id);
+  if (idx >= 0) {
+    existing[idx] = feedback;
+  } else {
+    existing.push(feedback);
+  }
+  writeJSON(KEYS.feedback, existing);
+}
+function getFeedback() {
+  return readJSON(KEYS.feedback, []);
+}
+function getSyncQueue() {
+  return readJSON(KEYS.syncQueue, []);
+}
+function addToSyncQueue(item) {
+  const queue = getSyncQueue();
+  queue.push(item);
+  writeJSON(KEYS.syncQueue, queue);
+}
+function updateSyncQueueItem(id, status) {
+  const queue = getSyncQueue().map(
+    (item) => item.id === id ? { ...item, status, retries: item.retries + 1 } : item
+  );
+  writeJSON(KEYS.syncQueue, queue);
+}
+function removeSyncQueueItem(id) {
+  const filtered = getSyncQueue().filter((item) => item.id !== id);
+  writeJSON(KEYS.syncQueue, filtered);
+}
 export {
   useQuery as a,
+  addToSyncQueue as b,
   createActor as c,
+  getProjects as d,
+  saveProject as e,
+  getSyncQueue as f,
+  getFeedback as g,
+  updateSyncQueueItem as h,
+  deleteProject as i,
+  removeSyncQueueItem as r,
+  saveFeedback as s,
   useActor as u
 };

@@ -3,9 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useNetworkStatusContext } from "@/context/NetworkStatusContext";
+import {
+  addToSyncQueue,
+  saveProject as saveOfflineProject,
+} from "@/lib/offlineStorage";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ImagePlus, Loader2, Plus, X } from "lucide-react";
+import { ImagePlus, Loader2, Plus, WifiOff, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -41,6 +46,8 @@ export function AddProjectForm() {
   const { actor, isFetching } = useActor(createActor);
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { isOnline, isBackendReachable } = useNetworkStatusContext();
+  const backendAvailable = isOnline && isBackendReachable;
 
   const [fields, setFields] = useState<FormFields>(INITIAL_FIELDS);
   const [photos, setPhotos] = useState<UploadedPhoto[]>([]);
@@ -53,7 +60,6 @@ export function AddProjectForm() {
     const files = Array.from(e.target.files ?? []);
     if (files.length === 0) return;
 
-    // Reset file input so same files can be re-selected if needed
     if (fileInputRef.current) fileInputRef.current.value = "";
 
     for (const file of files) {
@@ -61,8 +67,6 @@ export function AddProjectForm() {
       setUploading((prev) => [...prev, { id, name: file.name, progress: 0 }]);
 
       try {
-        // Simulate progress: read file as data URL for object-storage-free fallback
-        // In a real object-storage setup, this would call the upload API
         const dataUrl = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.onprogress = (event) => {
@@ -95,6 +99,37 @@ export function AddProjectForm() {
   const removePhoto = (id: string) =>
     setPhotos((prev) => prev.filter((p) => p.id !== id));
 
+  /** Save project offline to localStorage and queue for sync */
+  const saveOffline = () => {
+    const localId = `offline-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    const now = Date.now();
+    saveOfflineProject({
+      id: localId,
+      name: fields.name.trim(),
+      description: fields.description.trim(),
+      client: fields.client.trim(),
+      location: fields.location.trim(),
+      year: fields.year.trim(),
+      photoUrls: photos.map((p) => p.url),
+      createdAt: now,
+      synced: false,
+    });
+    addToSyncQueue({
+      id: `sq-${localId}`,
+      type: "createProject",
+      refId: localId,
+      status: "pending",
+      retries: 0,
+      createdAt: now,
+    });
+    toast.success("Saved offline — will sync when connected.", {
+      duration: 5000,
+    });
+    setFields(INITIAL_FIELDS);
+    setPhotos([]);
+    queryClient.invalidateQueries({ queryKey: ["admin-projects"] });
+  };
+
   const { mutate: createProject, isPending } = useMutation({
     mutationFn: async () => {
       if (!actor) throw new Error("Not connected");
@@ -124,6 +159,10 @@ export function AddProjectForm() {
       toast.error("Project name and description are required.");
       return;
     }
+    if (!backendAvailable) {
+      saveOffline();
+      return;
+    }
     createProject();
   };
 
@@ -131,14 +170,32 @@ export function AddProjectForm() {
 
   return (
     <div className="bg-card border border-border rounded-2xl shadow-card p-6">
-      <div className="flex items-center gap-2 mb-6">
+      <div className="flex items-center gap-2 mb-4">
         <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
           <Plus size={16} className="text-accent-teal" />
         </div>
         <h2 className="font-display font-bold text-lg text-foreground">
           Add New Project
         </h2>
+        {!backendAvailable && (
+          <span
+            className="ml-auto flex items-center gap-1 text-xs font-body font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-400/30 rounded-full px-2 py-0.5"
+            data-ocid="add-form-offline-badge"
+          >
+            <WifiOff size={11} />
+            Offline
+          </span>
+        )}
       </div>
+
+      {!backendAvailable && (
+        <div className="mb-5 bg-amber-500/10 border border-amber-400/30 rounded-xl px-4 py-3">
+          <p className="font-body text-xs text-amber-700 dark:text-amber-300">
+            You are offline. Projects will be saved locally and synced to the
+            cloud automatically when you reconnect.
+          </p>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Project Name */}
@@ -240,7 +297,6 @@ export function AddProjectForm() {
             Project Photos
           </Label>
 
-          {/* Upload trigger */}
           <label
             htmlFor="photo-upload"
             className="border-2 border-dashed border-border rounded-xl p-5 text-center cursor-pointer hover:border-accent-teal/50 hover:bg-accent/5 transition-smooth group block"
@@ -263,7 +319,7 @@ export function AddProjectForm() {
               <span className="text-accent-teal font-semibold">
                 Click to upload
               </span>{" "}
-              or drag & drop
+              or drag &amp; drop
             </p>
             <p className="font-body text-xs text-muted-foreground/60 mt-1">
               JPG, PNG, WEBP — multiple files allowed
@@ -339,7 +395,11 @@ export function AddProjectForm() {
             ) : (
               <Plus size={16} />
             )}
-            {isPending ? "Creating Project…" : "Add Project"}
+            {isPending
+              ? "Creating Project…"
+              : backendAvailable
+                ? "Add Project"
+                : "Save Offline"}
           </Button>
         </div>
       </form>

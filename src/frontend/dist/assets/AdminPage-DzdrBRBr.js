@@ -1,13 +1,13 @@
-import { c as createLucideIcon, u as useQueryClient, r as reactExports, j as jsxRuntimeExports, X, B as Button, d as useInternetIdentity, S as Skeleton, a as MapPin } from "./index-rAAVCMgz.js";
-import { u as useActor, c as createActor, a as useQuery } from "./backend-Cy4QAbrw.js";
-import { u as useMutation, a as ue, L as Label, I as Input, T as Textarea, B as Badge, U as User, C as Calendar } from "./index-B3_Q53bJ.js";
+import { c as createLucideIcon, b as useQueryClient, r as reactExports, u as useNetworkStatusContext, j as jsxRuntimeExports, X, B as Button, e as useInternetIdentity, S as Skeleton, a as MapPin } from "./index-8XfmXAzJ.js";
+import { u as useActor, e as saveProject, b as addToSyncQueue, c as createActor, f as getSyncQueue, h as updateSyncQueueItem, r as removeSyncQueueItem, d as getProjects, g as getFeedback, a as useQuery, i as deleteProject } from "./offlineStorage-PD1dFHmI.js";
+import { u as useMutation, a as ue, W as WifiOff, L as Label, I as Input, T as Textarea, B as Badge, U as User, C as Calendar } from "./index-BNo11_XK.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$7 = [
+const __iconNode$a = [
   [
     "path",
     {
@@ -16,28 +16,28 @@ const __iconNode$7 = [
     }
   ]
 ];
-const FolderOpen = createLucideIcon("folder-open", __iconNode$7);
+const FolderOpen = createLucideIcon("folder-open", __iconNode$a);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$6 = [
+const __iconNode$9 = [
   ["path", { d: "M16 5h6", key: "1vod17" }],
   ["path", { d: "M19 2v6", key: "4bpg5p" }],
   ["path", { d: "M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5", key: "1ue2ih" }],
   ["path", { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21", key: "1xmnt7" }],
   ["circle", { cx: "9", cy: "9", r: "2", key: "af1f0g" }]
 ];
-const ImagePlus = createLucideIcon("image-plus", __iconNode$6);
+const ImagePlus = createLucideIcon("image-plus", __iconNode$9);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$5 = [
+const __iconNode$8 = [
   [
     "path",
     {
@@ -47,15 +47,49 @@ const __iconNode$5 = [
   ],
   ["circle", { cx: "16.5", cy: "7.5", r: ".5", fill: "currentColor", key: "w0ekpg" }]
 ];
-const KeyRound = createLucideIcon("key-round", __iconNode$5);
+const KeyRound = createLucideIcon("key-round", __iconNode$8);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$4 = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
-const LoaderCircle = createLucideIcon("loader-circle", __iconNode$4);
+const __iconNode$7 = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = createLucideIcon("loader-circle", __iconNode$7);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$6 = [
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+];
+const Lock = createLucideIcon("lock", __iconNode$6);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
+  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
+  ["path", { d: "M21 12H9", key: "dn1m92" }],
+  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+];
+const LogOut = createLucideIcon("log-out", __iconNode$5);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$4 = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "M12 5v14", key: "s699le" }]
+];
+const Plus = createLucideIcon("plus", __iconNode$4);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -63,11 +97,12 @@ const LoaderCircle = createLucideIcon("loader-circle", __iconNode$4);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$3 = [
-  ["path", { d: "m16 17 5-5-5-5", key: "1bji2h" }],
-  ["path", { d: "M21 12H9", key: "dn1m92" }],
-  ["path", { d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4", key: "1uf3rs" }]
+  ["path", { d: "M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8", key: "v9h5vc" }],
+  ["path", { d: "M21 3v5h-5", key: "1q7to0" }],
+  ["path", { d: "M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16", key: "3uifl3" }],
+  ["path", { d: "M8 16H3v5", key: "1cv678" }]
 ];
-const LogOut = createLucideIcon("log-out", __iconNode$3);
+const RefreshCw = createLucideIcon("refresh-cw", __iconNode$3);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -75,17 +110,6 @@ const LogOut = createLucideIcon("log-out", __iconNode$3);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$2 = [
-  ["path", { d: "M5 12h14", key: "1ays0h" }],
-  ["path", { d: "M12 5v14", key: "s699le" }]
-];
-const Plus = createLucideIcon("plus", __iconNode$2);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$1 = [
   [
     "path",
     {
@@ -95,7 +119,31 @@ const __iconNode$1 = [
   ],
   ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-const ShieldCheck = createLucideIcon("shield-check", __iconNode$1);
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$2);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$1 = [
+  ["path", { d: "m2 2 20 20", key: "1ooewy" }],
+  [
+    "path",
+    {
+      d: "M5 5a1 1 0 0 0-1 1v7c0 5 3.5 7.5 7.67 8.94a1 1 0 0 0 .67.01c2.35-.82 4.48-1.97 5.9-3.71",
+      key: "1jlk70"
+    }
+  ],
+  [
+    "path",
+    {
+      d: "M9.309 3.652A12.252 12.252 0 0 0 11.24 2.28a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1v7a9.784 9.784 0 0 1-.08 1.264",
+      key: "18rp1v"
+    }
+  ]
+];
+const ShieldOff = createLucideIcon("shield-off", __iconNode$1);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -121,6 +169,8 @@ function AddProjectForm() {
   const { actor, isFetching } = useActor(createActor);
   const queryClient = useQueryClient();
   const fileInputRef = reactExports.useRef(null);
+  const { isOnline, isBackendReachable } = useNetworkStatusContext();
+  const backendAvailable = isOnline && isBackendReachable;
   const [fields, setFields] = reactExports.useState(INITIAL_FIELDS);
   const [photos, setPhotos] = reactExports.useState([]);
   const [uploading, setUploading] = reactExports.useState([]);
@@ -161,6 +211,35 @@ function AddProjectForm() {
     }
   };
   const removePhoto = (id) => setPhotos((prev) => prev.filter((p) => p.id !== id));
+  const saveOffline = () => {
+    const localId = `offline-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    const now = Date.now();
+    saveProject({
+      id: localId,
+      name: fields.name.trim(),
+      description: fields.description.trim(),
+      client: fields.client.trim(),
+      location: fields.location.trim(),
+      year: fields.year.trim(),
+      photoUrls: photos.map((p) => p.url),
+      createdAt: now,
+      synced: false
+    });
+    addToSyncQueue({
+      id: `sq-${localId}`,
+      type: "createProject",
+      refId: localId,
+      status: "pending",
+      retries: 0,
+      createdAt: now
+    });
+    ue.success("Saved offline — will sync when connected.", {
+      duration: 5e3
+    });
+    setFields(INITIAL_FIELDS);
+    setPhotos([]);
+    queryClient.invalidateQueries({ queryKey: ["admin-projects"] });
+  };
   const { mutate: createProject, isPending } = useMutation({
     mutationFn: async () => {
       if (!actor) throw new Error("Not connected");
@@ -189,14 +268,30 @@ function AddProjectForm() {
       ue.error("Project name and description are required.");
       return;
     }
+    if (!backendAvailable) {
+      saveOffline();
+      return;
+    }
     createProject();
   };
   const isDisabled = isPending || isFetching || uploading.length > 0;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border border-border rounded-2xl shadow-card p-6", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-6", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 16, className: "text-accent-teal" }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-lg text-foreground", children: "Add New Project" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display font-bold text-lg text-foreground", children: "Add New Project" }),
+      !backendAvailable && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "span",
+        {
+          className: "ml-auto flex items-center gap-1 text-xs font-body font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-400/30 rounded-full px-2 py-0.5",
+          "data-ocid": "add-form-offline-badge",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(WifiOff, { size: 11 }),
+            "Offline"
+          ]
+        }
+      )
     ] }),
+    !backendAvailable && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mb-5 bg-amber-500/10 border border-amber-400/30 rounded-xl px-4 py-3", children: /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-body text-xs text-amber-700 dark:text-amber-300", children: "You are offline. Projects will be saved locally and synced to the cloud automatically when you reconnect." }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-5", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-1.5", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -420,11 +515,107 @@ function AddProjectForm() {
           "data-ocid": "admin-proj-submit-btn",
           children: [
             isPending ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 16, className: "animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Plus, { size: 16 }),
-            isPending ? "Creating Project…" : "Add Project"
+            isPending ? "Creating Project…" : backendAvailable ? "Add Project" : "Save Offline"
           ]
         }
       ) })
     ] })
+  ] });
+}
+const MAX_RETRIES = 3;
+function useOfflineSync() {
+  const { isBackendReachable } = useNetworkStatusContext();
+  const { actor } = useActor(createActor);
+  const [isSyncing, setIsSyncing] = reactExports.useState(false);
+  const [pendingCount, setPendingCount] = reactExports.useState(
+    () => getSyncQueue().filter((i) => i.status === "pending").length
+  );
+  const [lastSyncAt, setLastSyncAt] = reactExports.useState(null);
+  const syncingRef = reactExports.useRef(false);
+  const refreshPending = reactExports.useCallback(() => {
+    setPendingCount(
+      getSyncQueue().filter((i) => i.status === "pending").length
+    );
+  }, []);
+  const syncNow = reactExports.useCallback(async () => {
+    if (syncingRef.current || !actor || !isBackendReachable) return;
+    syncingRef.current = true;
+    setIsSyncing(true);
+    const queue = getSyncQueue().filter(
+      (i) => i.status === "pending" || i.status === "retrying"
+    );
+    for (const item of queue) {
+      if (item.retries >= MAX_RETRIES) {
+        updateSyncQueueItem(item.id, "failed");
+        continue;
+      }
+      try {
+        await processQueueItem(item, actor);
+        removeSyncQueueItem(item.id);
+      } catch {
+        if (item.retries + 1 >= MAX_RETRIES) {
+          updateSyncQueueItem(item.id, "failed");
+        } else {
+          updateSyncQueueItem(item.id, "retrying");
+        }
+      }
+    }
+    setLastSyncAt(/* @__PURE__ */ new Date());
+    refreshPending();
+    syncingRef.current = false;
+    setIsSyncing(false);
+  }, [actor, isBackendReachable, refreshPending]);
+  const prevReachable = reactExports.useRef(false);
+  reactExports.useEffect(() => {
+    if (isBackendReachable && !prevReachable.current) {
+      void syncNow();
+    }
+    prevReachable.current = isBackendReachable;
+  }, [isBackendReachable, syncNow]);
+  reactExports.useEffect(() => {
+    refreshPending();
+  }, [refreshPending]);
+  return {
+    pendingCount,
+    isSyncing,
+    syncNow,
+    lastSyncAt
+  };
+}
+async function processQueueItem(item, actor) {
+  if (item.type === "createProject") {
+    const project = getProjects().find((p) => p.id === item.refId);
+    if (!project) return;
+    await actor.createProject(
+      project.name,
+      project.description,
+      project.client,
+      project.location,
+      project.year,
+      project.photoUrls
+    );
+  } else if (item.type === "submitFeedback") {
+    const fb = getFeedback().find((f) => f.id === item.refId);
+    if (!fb) return;
+    await actor.submitFeedback(fb.name, fb.email, fb.message);
+  }
+}
+function SyncBadge({ status }) {
+  if (status === "synced") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "inline-flex items-center gap-1 text-[10px] font-mono font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-1.5 py-0.5 shrink-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-1 h-1 rounded-full bg-emerald-500" }),
+      "Synced"
+    ] });
+  }
+  if (status === "failed") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "inline-flex items-center gap-1 text-[10px] font-mono font-semibold text-destructive bg-destructive/10 border border-destructive/20 rounded-full px-1.5 py-0.5 shrink-0", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-1 h-1 rounded-full bg-destructive" }),
+      "Sync Failed"
+    ] });
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "inline-flex items-center gap-1 text-[10px] font-mono font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-full px-1.5 py-0.5 shrink-0", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-1 h-1 rounded-full bg-amber-400 animate-pulse" }),
+    "Pending Sync"
   ] });
 }
 function ProjectRow({
@@ -436,11 +627,12 @@ function ProjectRow({
     "div",
     {
       className: "flex items-start justify-between gap-4 py-4 border-b border-border last:border-0",
-      "data-ocid": `admin-proj-row-${project.id}`,
+      "data-ocid": `admin-proj-row-${project.offlineId ?? String(project.id)}`,
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-1 min-w-0", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center gap-2 mb-1", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "font-body font-semibold text-sm text-foreground truncate", children: project.name }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(SyncBadge, { status: project.syncStatus }),
             project.photoUrls.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs(Badge, { variant: "secondary", className: "text-xs font-mono shrink-0", children: [
               project.photoUrls.length,
               " photo",
@@ -468,11 +660,12 @@ function ProjectRow({
           {
             variant: "ghost",
             size: "sm",
-            onClick: () => onDelete(project.id),
+            onClick: onDelete,
             disabled: isDeleting,
             "aria-label": `Delete project: ${project.name}`,
             className: "shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive",
             "data-ocid": "admin-proj-delete-btn",
+            type: "button",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Trash2, { size: 14 })
           }
         )
@@ -484,15 +677,39 @@ function AdminDashboard() {
   const { clear, identity } = useInternetIdentity();
   const { actor, isFetching } = useActor(createActor);
   const queryClient = useQueryClient();
-  const { data: projects = [], isLoading } = useQuery({
+  const { isOnline, isBackendReachable } = useNetworkStatusContext();
+  const backendAvailable = isOnline && isBackendReachable;
+  const { pendingCount, isSyncing, syncNow } = useOfflineSync();
+  const { data: onlineProjects = [], isLoading: onlineLoading } = useQuery({
     queryKey: ["admin-projects"],
     queryFn: async () => {
       if (!actor) return [];
       return actor.getProjects();
     },
-    enabled: !!actor && !isFetching
+    enabled: !!actor && !isFetching && backendAvailable
   });
-  const { mutate: deleteProject, variables: deletingId } = useMutation({
+  const [offlineProjects, setOfflineProjects] = reactExports.useState(
+    () => getProjects()
+  );
+  const projects = backendAvailable ? onlineProjects.map((p) => ({ ...p, syncStatus: "synced" })) : offlineProjects.map((p) => ({
+    id: BigInt(0),
+    name: p.name,
+    description: p.description,
+    client: p.client,
+    location: p.location,
+    year: p.year,
+    photoUrls: p.photoUrls,
+    createdAt: BigInt(p.createdAt),
+    offlineId: p.id,
+    syncStatus: p.synced ? "synced" : "pending"
+  }));
+  const isLoading = backendAvailable ? onlineLoading : false;
+  reactExports.useEffect(() => {
+    if (!backendAvailable) {
+      setOfflineProjects(getProjects());
+    }
+  }, [backendAvailable]);
+  const { mutate: deleteProject$1, variables: deletingId } = useMutation({
     mutationFn: async (id) => {
       if (!actor) throw new Error("Not connected");
       return actor.deleteProject(id);
@@ -500,11 +717,22 @@ function AdminDashboard() {
     onSuccess: () => {
       ue.success("Project deleted.");
       queryClient.invalidateQueries({ queryKey: ["admin-projects"] });
+      setOfflineProjects(getProjects());
     },
     onError: () => {
       ue.error("Failed to delete project.");
     }
   });
+  const handleDelete = (project) => {
+    if (!backendAvailable && project.offlineId) {
+      deleteProject(project.offlineId);
+      ue.success("Project removed.");
+      queryClient.invalidateQueries({ queryKey: ["admin-projects"] });
+      setOfflineProjects(getProjects());
+      return;
+    }
+    deleteProject$1(project.id);
+  };
   const principalStr = (identity == null ? void 0 : identity.getPrincipal().toText()) ?? "";
   const shortPrincipal = principalStr.length > 20 ? `${principalStr.slice(0, 10)}…${principalStr.slice(-6)}` : principalStr;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-background", children: [
@@ -512,11 +740,39 @@ function AdminDashboard() {
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-8 bg-navy rounded-lg flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { size: 16, className: "text-accent-teal" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "leading-tight", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-display font-bold text-sm text-foreground", children: "Admin Dashboard" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-display font-bold text-sm text-foreground", children: "Admin Dashboard" }),
+            !backendAvailable && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: "flex items-center gap-1 bg-amber-500/10 border border-amber-500/30 rounded-full px-2 py-0.5",
+                "data-ocid": "admin-offline-badge",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-body text-xs font-semibold text-amber-600 dark:text-amber-400", children: "Offline" })
+                ]
+              }
+            )
+          ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-muted-foreground font-body", children: "Perfect Designing Hub" })
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+        pendingCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            variant: "outline",
+            size: "sm",
+            onClick: syncNow,
+            disabled: isSyncing || !backendAvailable,
+            className: "gap-1.5 font-body text-xs text-amber-600 border-amber-400/40 hover:bg-amber-50 dark:hover:bg-amber-900/20",
+            "data-ocid": "admin-sync-btn",
+            children: [
+              isSyncing ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { size: 12, className: "animate-spin" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { size: 12 }),
+              isSyncing ? "Syncing…" : `${pendingCount} pending`
+            ]
+          }
+        ),
         shortPrincipal && /* @__PURE__ */ jsxRuntimeExports.jsx(
           "span",
           {
@@ -549,6 +805,38 @@ function AdminDashboard() {
         )
       ] })
     ] }) }),
+    !backendAvailable && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "div",
+      {
+        className: "bg-amber-500/10 border-b border-amber-400/30 px-4 py-2.5 text-center",
+        "data-ocid": "admin-offline-banner",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "font-body text-xs text-amber-700 dark:text-amber-300", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-semibold", children: "You are in offline mode." }),
+          " ",
+          "Projects saved now will sync automatically when connection is restored.",
+          pendingCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+            " ",
+            " • ",
+            " ",
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "font-semibold", children: [
+              pendingCount,
+              " item",
+              pendingCount > 1 ? "s" : "",
+              " pending sync."
+            ] }),
+            backendAvailable && /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                type: "button",
+                onClick: syncNow,
+                className: "ml-1.5 underline font-semibold hover:no-underline",
+                children: "Sync Now"
+              }
+            )
+          ] })
+        ] })
+      }
+    ),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-5xl mx-auto px-4 sm:px-6 py-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-5 gap-8 items-start", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "lg:col-span-3 lg:sticky lg:top-24", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AddProjectForm, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "lg:col-span-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-card border border-border rounded-2xl shadow-card overflow-hidden", children: [
@@ -584,14 +872,14 @@ function AdminDashboard() {
               /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-body text-sm text-muted-foreground", children: "No projects yet. Add one using the form." })
             ]
           }
-        ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "data-ocid": "admin-projects-list", children: projects.map((project) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "data-ocid": "admin-projects-list", children: projects.map((project, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           ProjectRow,
           {
             project,
-            onDelete: deleteProject,
-            isDeleting: deletingId === project.id
+            onDelete: () => handleDelete(project),
+            isDeleting: !project.offlineId && deletingId === project.id
           },
-          String(project.id)
+          project.offlineId ?? String(project.id) + idx
         )) }) })
       ] }) })
     ] }) }),
@@ -646,16 +934,192 @@ function AdminLogin() {
     ] })
   ] }) });
 }
+const PIN_KEY = "pdh_admin_pin";
+function hashPin(pin) {
+  return btoa(`pdh:${pin}:adminlock`);
+}
+function OfflinePinAuth({ onSuccess }) {
+  const storedHash = localStorage.getItem(PIN_KEY);
+  const isSettingPin = !storedHash;
+  const [pin, setPin] = reactExports.useState("");
+  const [confirmPin, setConfirmPin] = reactExports.useState("");
+  const [error, setError] = reactExports.useState(null);
+  const [shaking, setShaking] = reactExports.useState(false);
+  const inputRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    var _a;
+    (_a = inputRef.current) == null ? void 0 : _a.focus();
+  }, []);
+  const triggerShake = () => {
+    setShaking(true);
+    setTimeout(() => setShaking(false), 600);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError(null);
+    if (pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+      setError("PIN must be exactly 4 digits.");
+      triggerShake();
+      return;
+    }
+    if (isSettingPin) {
+      if (pin !== confirmPin) {
+        setError("PINs do not match. Please try again.");
+        triggerShake();
+        setPin("");
+        setConfirmPin("");
+        return;
+      }
+      localStorage.setItem(PIN_KEY, hashPin(pin));
+      onSuccess();
+    } else {
+      if (hashPin(pin) !== storedHash) {
+        setError("Incorrect PIN. Please try again.");
+        triggerShake();
+        setPin("");
+        return;
+      }
+      onSuccess();
+    }
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen flex items-center justify-center bg-background px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-sm", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: `bg-card border border-border rounded-2xl shadow-elevated p-8 flex flex-col items-center gap-6 ${shaking ? "animate-[shake_0.5s_ease-in-out]" : ""}`,
+        "data-ocid": "offline-pin-auth.dialog",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-16 h-16 bg-navy rounded-2xl flex items-center justify-center shadow-elevated", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldOff, { size: 32, className: "text-amber-400" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full px-3 py-1", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-body text-xs font-semibold text-amber-600 dark:text-amber-400", children: "Offline Mode" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "font-display font-bold text-2xl text-foreground mb-1", children: isSettingPin ? "Set Admin PIN" : "Admin Access" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-body text-sm text-muted-foreground", children: isSettingPin ? "Set a 4-digit PIN to enable offline admin access" : "Enter your 4-digit PIN to access the admin dashboard" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full border-t border-border" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "w-full space-y-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "label",
+                {
+                  htmlFor: "pin-input",
+                  className: "block font-body text-xs font-semibold uppercase tracking-wide text-muted-foreground",
+                  children: isSettingPin ? "Choose PIN" : "Enter PIN"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Input,
+                {
+                  id: "pin-input",
+                  ref: inputRef,
+                  type: "password",
+                  inputMode: "numeric",
+                  pattern: "[0-9]{4}",
+                  maxLength: 4,
+                  value: pin,
+                  onChange: (e) => {
+                    setError(null);
+                    setPin(e.target.value.replace(/\D/g, "").slice(0, 4));
+                  },
+                  placeholder: "• • • •",
+                  className: "font-mono text-center text-xl tracking-[0.5em] h-12",
+                  "data-ocid": "offline-pin-auth.input"
+                }
+              )
+            ] }),
+            isSettingPin && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "label",
+                {
+                  htmlFor: "confirm-pin-input",
+                  className: "block font-body text-xs font-semibold uppercase tracking-wide text-muted-foreground",
+                  children: "Confirm PIN"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Input,
+                {
+                  id: "confirm-pin-input",
+                  type: "password",
+                  inputMode: "numeric",
+                  pattern: "[0-9]{4}",
+                  maxLength: 4,
+                  value: confirmPin,
+                  onChange: (e) => {
+                    setError(null);
+                    setConfirmPin(
+                      e.target.value.replace(/\D/g, "").slice(0, 4)
+                    );
+                  },
+                  placeholder: "• • • •",
+                  className: "font-mono text-center text-xl tracking-[0.5em] h-12",
+                  "data-ocid": "offline-pin-auth.confirm-input"
+                }
+              )
+            ] }),
+            error && /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "p",
+              {
+                className: "font-body text-sm text-destructive text-center",
+                "data-ocid": "offline-pin-auth.error_state",
+                children: error
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Button,
+              {
+                type: "submit",
+                className: "w-full gap-2 bg-primary text-primary-foreground font-body font-semibold",
+                size: "lg",
+                "data-ocid": "offline-pin-auth.submit_button",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Lock, { size: 16 }),
+                  isSettingPin ? "Set PIN & Continue" : "Unlock Admin"
+                ]
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full border-t border-border" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "a",
+            {
+              href: "/",
+              className: "font-body text-xs text-muted-foreground hover:text-accent-teal transition-colors",
+              children: "← Back to main site"
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-center text-xs text-muted-foreground mt-6 font-body", children: [
+      "© ",
+      (/* @__PURE__ */ new Date()).getFullYear(),
+      " Perfect Designing Hub"
+    ] })
+  ] }) });
+}
 function AdminPage() {
   const { identity, isInitializing } = useInternetIdentity();
-  if (isInitializing) {
+  const {
+    isOnline,
+    isBackendReachable,
+    isChecking: networkChecking
+  } = useNetworkStatusContext();
+  const [offlineAuthed, setOfflineAuthed] = reactExports.useState(false);
+  if (isInitializing || networkChecking) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen flex items-center justify-center bg-background", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 border-2 border-accent-teal/30 border-t-accent-teal rounded-full animate-spin" }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-body text-sm text-muted-foreground", children: "Checking session…" })
     ] }) });
   }
-  if (!identity) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(AdminLogin, {});
+  if (isOnline && isBackendReachable) {
+    if (!identity) return /* @__PURE__ */ jsxRuntimeExports.jsx(AdminLogin, {});
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, {});
+  }
+  if (!offlineAuthed) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(OfflinePinAuth, { onSuccess: () => setOfflineAuthed(true) });
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, {});
 }

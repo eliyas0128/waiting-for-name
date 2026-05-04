@@ -1,5 +1,6 @@
 import { Layout } from "@/components/Layout";
 import { Skeleton } from "@/components/ui/skeleton";
+import { NetworkStatusProvider } from "@/context/NetworkStatusContext";
 import {
   Outlet,
   RouterProvider,
@@ -87,5 +88,9 @@ declare module "@tanstack/react-router" {
 }
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <NetworkStatusProvider>
+      <RouterProvider router={router} />
+    </NetworkStatusProvider>
+  );
 }

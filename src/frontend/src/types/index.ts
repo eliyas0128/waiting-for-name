@@ -80,6 +80,46 @@ export const TOC_ITEMS: TocItem[] = [
   { id: "services", label: "Services" },
   { id: "projects", label: "Projects" },
   { id: "case-studies", label: "Case Studies" },
-  { id: "gallery", label: "Gallery", icon: "🖼️" },
+  { id: "gallery", label: "Gallery", icon: "\uD83D\uDDBC\uFE0F" },
   { id: "feedback", label: "Feedback" },
 ];
+
+// ── Offline / Sync types ────────────────────────────────────────
+// Shared by offlineStorage.ts, useOfflineSync, and useNetworkStatus
+
+/** A project stored locally before being synced to the canister */
+export interface OfflineProject {
+  /** Local string ID (crypto.randomUUID()) — NOT a bigint canister ID */
+  id: string;
+  name: string;
+  description: string;
+  client: string;
+  location: string;
+  year: string;
+  photoUrls: string[];
+  createdAt: number; // Date.now()
+  /** Whether the item has been confirmed saved to the canister */
+  synced: boolean;
+}
+
+/** A feedback entry stored locally before being synced to the canister */
+export interface OfflineFeedback {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  createdAt: number;
+  synced: boolean;
+}
+
+/** A queued operation waiting to be replayed against the canister */
+export interface SyncQueueItem {
+  id: string;
+  type: "createProject" | "submitFeedback";
+  /** ID of the local OfflineProject or OfflineFeedback this action references */
+  refId: string;
+  status: "pending" | "retrying" | "failed";
+  /** Number of retry attempts made so far */
+  retries: number;
+  createdAt: number;
+}

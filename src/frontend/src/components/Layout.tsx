@@ -1,3 +1,4 @@
+import { NetworkStatusIndicator } from "@/components/NetworkStatusIndicator";
 import { Button } from "@/components/ui/button";
 import { COMPANY_CONTACT } from "@/types/index";
 import {
@@ -110,6 +111,7 @@ export function Layout({ children }: LayoutProps) {
               <Phone size={13} className="mr-1.5" />
               Contact Us
             </Button>
+            <NetworkStatusIndicator />
           </nav>
 
           {/* Tablet: show phone + hamburger */}
@@ -202,7 +204,7 @@ export function Layout({ children }: LayoutProps) {
                 </Button>
                 <Button
                   variant="outline"
-                  className="flex-1 min-h-[44px] border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10"
+                  className="flex-1 min-h-[44px] border-whatsapp text-whatsapp hover:bg-whatsapp/10"
                   asChild
                 >
                   <a
@@ -358,7 +360,7 @@ export function Layout({ children }: LayoutProps) {
                     href="https://wa.me/917869091028"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-1 px-4 py-2 rounded-lg bg-[#25D366]/15 text-[#25D366] text-xs font-semibold hover:bg-[#25D366]/25 transition-colors min-h-[40px]"
+                    className="inline-flex items-center gap-2 mt-1 px-4 py-2 rounded-lg bg-whatsapp/15 text-whatsapp text-xs font-semibold hover:bg-whatsapp/25 transition-colors min-h-[40px]"
                     data-ocid="footer.whatsapp_link"
                   >
                     <MessageCircle size={14} />

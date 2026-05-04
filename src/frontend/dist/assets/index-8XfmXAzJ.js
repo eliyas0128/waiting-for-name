@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Home-B9jAlNnS.js","assets/badge-9S0LW41U.js","assets/GalleryPage-Dfhbo1k1.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Home-Pr1cjkBw.js","assets/index-BNo11_XK.js","assets/offlineStorage-PD1dFHmI.js","assets/gallery-BUORiAkH.js","assets/GalleryPage-RvVXTJ28.js","assets/AdminPage-DzdrBRBr.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -26279,134 +26279,100 @@ const __vitePreload = function preload2(baseModule, deps, importerUrl) {
     return baseModule().catch(handlePreloadError);
   });
 };
-function setRef(ref, value) {
-  if (typeof ref === "function") {
-    return ref(value);
-  } else if (ref !== null && ref !== void 0) {
-    ref.current = value;
+const __vite_import_meta_env__ = {};
+const CANISTER_HEALTH_TIMEOUT_MS = 5e3;
+function getCanisterUrl() {
+  const env = __vite_import_meta_env__;
+  const canisterId = (env == null ? void 0 : env.VITE_CANISTER_ID_BACKEND) ?? "";
+  if (!canisterId) return "";
+  const isLocal = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+  if (isLocal) {
+    return `http://localhost:4943/?canisterId=${canisterId}`;
   }
+  return `https://${canisterId}.icp0.io/`;
 }
-function composeRefs(...refs) {
-  return (node) => {
-    let hasCleanup = false;
-    const cleanups = refs.map((ref) => {
-      const cleanup = setRef(ref, node);
-      if (!hasCleanup && typeof cleanup == "function") {
-        hasCleanup = true;
-      }
-      return cleanup;
+async function checkCanisterHealth() {
+  const url = getCanisterUrl();
+  if (!url) return false;
+  const controller = new AbortController();
+  const timer = setTimeout(
+    () => controller.abort(),
+    CANISTER_HEALTH_TIMEOUT_MS
+  );
+  try {
+    const res = await fetch(url, {
+      method: "HEAD",
+      signal: controller.signal,
+      cache: "no-store"
     });
-    if (hasCleanup) {
-      return () => {
-        for (let i = 0; i < cleanups.length; i++) {
-          const cleanup = cleanups[i];
-          if (typeof cleanup == "function") {
-            cleanup();
-          } else {
-            setRef(refs[i], null);
-          }
-        }
-      };
-    }
-  };
-}
-var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-var use = React$4[" use ".trim().toString()];
-function isPromiseLike(value) {
-  return typeof value === "object" && value !== null && "then" in value;
-}
-function isLazyComponent(element) {
-  return element != null && typeof element === "object" && "$$typeof" in element && element.$$typeof === REACT_LAZY_TYPE && "_payload" in element && isPromiseLike(element._payload);
-}
-// @__NO_SIDE_EFFECTS__
-function createSlot(ownerName) {
-  const SlotClone = /* @__PURE__ */ createSlotClone(ownerName);
-  const Slot2 = reactExports.forwardRef((props, forwardedRef) => {
-    let { children, ...slotProps } = props;
-    if (isLazyComponent(children) && typeof use === "function") {
-      children = use(children._payload);
-    }
-    const childrenArray = reactExports.Children.toArray(children);
-    const slottable = childrenArray.find(isSlottable);
-    if (slottable) {
-      const newElement = slottable.props.children;
-      const newChildren = childrenArray.map((child) => {
-        if (child === slottable) {
-          if (reactExports.Children.count(newElement) > 1) return reactExports.Children.only(null);
-          return reactExports.isValidElement(newElement) ? newElement.props.children : null;
-        } else {
-          return child;
-        }
-      });
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: reactExports.isValidElement(newElement) ? reactExports.cloneElement(newElement, void 0, newChildren) : null });
-    }
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children });
-  });
-  Slot2.displayName = `${ownerName}.Slot`;
-  return Slot2;
-}
-var Slot = /* @__PURE__ */ createSlot("Slot");
-// @__NO_SIDE_EFFECTS__
-function createSlotClone(ownerName) {
-  const SlotClone = reactExports.forwardRef((props, forwardedRef) => {
-    let { children, ...slotProps } = props;
-    if (isLazyComponent(children) && typeof use === "function") {
-      children = use(children._payload);
-    }
-    if (reactExports.isValidElement(children)) {
-      const childrenRef = getElementRef(children);
-      const props2 = mergeProps(slotProps, children.props);
-      if (children.type !== reactExports.Fragment) {
-        props2.ref = forwardedRef ? composeRefs(forwardedRef, childrenRef) : childrenRef;
-      }
-      return reactExports.cloneElement(children, props2);
-    }
-    return reactExports.Children.count(children) > 1 ? reactExports.Children.only(null) : null;
-  });
-  SlotClone.displayName = `${ownerName}.SlotClone`;
-  return SlotClone;
-}
-var SLOTTABLE_IDENTIFIER = Symbol("radix.slottable");
-function isSlottable(child) {
-  return reactExports.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
-}
-function mergeProps(slotProps, childProps) {
-  const overrideProps = { ...childProps };
-  for (const propName in childProps) {
-    const slotPropValue = slotProps[propName];
-    const childPropValue = childProps[propName];
-    const isHandler = /^on[A-Z]/.test(propName);
-    if (isHandler) {
-      if (slotPropValue && childPropValue) {
-        overrideProps[propName] = (...args) => {
-          const result = childPropValue(...args);
-          slotPropValue(...args);
-          return result;
-        };
-      } else if (slotPropValue) {
-        overrideProps[propName] = slotPropValue;
-      }
-    } else if (propName === "style") {
-      overrideProps[propName] = { ...slotPropValue, ...childPropValue };
-    } else if (propName === "className") {
-      overrideProps[propName] = [slotPropValue, childPropValue].filter(Boolean).join(" ");
-    }
+    return res.status < 600;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timer);
   }
-  return { ...slotProps, ...overrideProps };
 }
-function getElementRef(element) {
-  var _a3, _b3;
-  let getter = (_a3 = Object.getOwnPropertyDescriptor(element.props, "ref")) == null ? void 0 : _a3.get;
-  let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
-  if (mayWarn) {
-    return element.ref;
-  }
-  getter = (_b3 = Object.getOwnPropertyDescriptor(element, "ref")) == null ? void 0 : _b3.get;
-  mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
-  if (mayWarn) {
-    return element.props.ref;
-  }
-  return element.props.ref || element.ref;
+function isOnlineMode() {
+  return typeof navigator !== "undefined" && navigator.onLine;
+}
+const POLL_INTERVAL_MS = 3e4;
+const NetworkStatusContext = reactExports.createContext({
+  isOnline: true,
+  isBackendReachable: false,
+  isChecking: true
+});
+function NetworkStatusProvider({
+  children
+}) {
+  const [isOnline, setIsOnline] = reactExports.useState(() => isOnlineMode());
+  const [isBackendReachable, setIsBackendReachable] = reactExports.useState(false);
+  const [isChecking, setIsChecking] = reactExports.useState(true);
+  const mountedRef = reactExports.useRef(true);
+  const check = reactExports.useCallback(async () => {
+    if (!mountedRef.current) return;
+    setIsChecking(true);
+    const networkUp = isOnlineMode();
+    setIsOnline(networkUp);
+    if (!networkUp) {
+      setIsBackendReachable(false);
+      setIsChecking(false);
+      return;
+    }
+    const reachable = await checkCanisterHealth();
+    if (mountedRef.current) {
+      setIsBackendReachable(reachable);
+      setIsChecking(false);
+    }
+  }, []);
+  reactExports.useEffect(() => {
+    mountedRef.current = true;
+    void check();
+    const interval = setInterval(() => void check(), POLL_INTERVAL_MS);
+    const onOnline = () => void check();
+    const onOffline = () => {
+      setIsOnline(false);
+      setIsBackendReachable(false);
+      setIsChecking(false);
+    };
+    window.addEventListener("online", onOnline);
+    window.addEventListener("offline", onOffline);
+    return () => {
+      mountedRef.current = false;
+      clearInterval(interval);
+      window.removeEventListener("online", onOnline);
+      window.removeEventListener("offline", onOffline);
+    };
+  }, [check]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    NetworkStatusContext.Provider,
+    {
+      value: { isOnline, isBackendReachable, isChecking },
+      children
+    }
+  );
+}
+function useNetworkStatusContext() {
+  return reactExports.useContext(NetworkStatusContext);
 }
 function r(e) {
   var t, f, n = "";
@@ -26421,46 +26387,6 @@ function clsx() {
   for (var e, t, f = 0, n = "", o2 = arguments.length; f < o2; f++) (e = arguments[f]) && (t = r(e)) && (n && (n += " "), n += t);
   return n;
 }
-const falsyToString = (value) => typeof value === "boolean" ? `${value}` : value === 0 ? "0" : value;
-const cx = clsx;
-const cva = (base, config) => (props) => {
-  var _config_compoundVariants;
-  if ((config === null || config === void 0 ? void 0 : config.variants) == null) return cx(base, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
-  const { variants, defaultVariants } = config;
-  const getVariantClassNames = Object.keys(variants).map((variant) => {
-    const variantProp = props === null || props === void 0 ? void 0 : props[variant];
-    const defaultVariantProp = defaultVariants === null || defaultVariants === void 0 ? void 0 : defaultVariants[variant];
-    if (variantProp === null) return null;
-    const variantKey = falsyToString(variantProp) || falsyToString(defaultVariantProp);
-    return variants[variant][variantKey];
-  });
-  const propsWithoutUndefined = props && Object.entries(props).reduce((acc, param) => {
-    let [key, value] = param;
-    if (value === void 0) {
-      return acc;
-    }
-    acc[key] = value;
-    return acc;
-  }, {});
-  const getCompoundVariantClassNames = config === null || config === void 0 ? void 0 : (_config_compoundVariants = config.compoundVariants) === null || _config_compoundVariants === void 0 ? void 0 : _config_compoundVariants.reduce((acc, param) => {
-    let { class: cvClass, className: cvClassName, ...compoundVariantOptions } = param;
-    return Object.entries(compoundVariantOptions).every((param2) => {
-      let [key, value] = param2;
-      return Array.isArray(value) ? value.includes({
-        ...defaultVariants,
-        ...propsWithoutUndefined
-      }[key]) : {
-        ...defaultVariants,
-        ...propsWithoutUndefined
-      }[key] === value;
-    }) ? [
-      ...acc,
-      cvClass,
-      cvClassName
-    ] : acc;
-  }, []);
-  return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
-};
 const CLASS_PART_SEPARATOR = "-";
 const createClassGroupUtils = (config) => {
   const classMap = createClassMap(config);
@@ -28923,6 +28849,217 @@ const twMerge = /* @__PURE__ */ createTailwindMerge(getDefaultConfig);
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
+function NetworkStatusIndicator() {
+  const { isOnline, isBackendReachable, isChecking } = useNetworkStatusContext();
+  let color;
+  let label;
+  let pulseClass = "";
+  if (isChecking) {
+    color = "bg-yellow-400";
+    label = "Checking connection…";
+    pulseClass = "animate-pulse";
+  } else if (!isOnline) {
+    color = "bg-red-500";
+    label = "No internet connection";
+  } else if (!isBackendReachable) {
+    color = "bg-yellow-400";
+    label = "Online — backend not reachable (offline mode)";
+  } else {
+    color = "bg-emerald-500";
+    label = "Online — backend connected";
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "output",
+    {
+      className: "relative flex items-center justify-center",
+      title: label,
+      "aria-label": label,
+      "data-ocid": "network_status_indicator",
+      children: [
+        !isChecking && isOnline && isBackendReachable && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute inline-flex h-4 w-4 rounded-full bg-emerald-400 opacity-60 animate-ping" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: cn(
+              "relative inline-flex w-2.5 h-2.5 rounded-full",
+              color,
+              pulseClass
+            )
+          }
+        )
+      ]
+    }
+  );
+}
+function setRef(ref, value) {
+  if (typeof ref === "function") {
+    return ref(value);
+  } else if (ref !== null && ref !== void 0) {
+    ref.current = value;
+  }
+}
+function composeRefs(...refs) {
+  return (node) => {
+    let hasCleanup = false;
+    const cleanups = refs.map((ref) => {
+      const cleanup = setRef(ref, node);
+      if (!hasCleanup && typeof cleanup == "function") {
+        hasCleanup = true;
+      }
+      return cleanup;
+    });
+    if (hasCleanup) {
+      return () => {
+        for (let i = 0; i < cleanups.length; i++) {
+          const cleanup = cleanups[i];
+          if (typeof cleanup == "function") {
+            cleanup();
+          } else {
+            setRef(refs[i], null);
+          }
+        }
+      };
+    }
+  };
+}
+var REACT_LAZY_TYPE = Symbol.for("react.lazy");
+var use = React$4[" use ".trim().toString()];
+function isPromiseLike(value) {
+  return typeof value === "object" && value !== null && "then" in value;
+}
+function isLazyComponent(element) {
+  return element != null && typeof element === "object" && "$$typeof" in element && element.$$typeof === REACT_LAZY_TYPE && "_payload" in element && isPromiseLike(element._payload);
+}
+// @__NO_SIDE_EFFECTS__
+function createSlot(ownerName) {
+  const SlotClone = /* @__PURE__ */ createSlotClone(ownerName);
+  const Slot2 = reactExports.forwardRef((props, forwardedRef) => {
+    let { children, ...slotProps } = props;
+    if (isLazyComponent(children) && typeof use === "function") {
+      children = use(children._payload);
+    }
+    const childrenArray = reactExports.Children.toArray(children);
+    const slottable = childrenArray.find(isSlottable);
+    if (slottable) {
+      const newElement = slottable.props.children;
+      const newChildren = childrenArray.map((child) => {
+        if (child === slottable) {
+          if (reactExports.Children.count(newElement) > 1) return reactExports.Children.only(null);
+          return reactExports.isValidElement(newElement) ? newElement.props.children : null;
+        } else {
+          return child;
+        }
+      });
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: reactExports.isValidElement(newElement) ? reactExports.cloneElement(newElement, void 0, newChildren) : null });
+    }
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children });
+  });
+  Slot2.displayName = `${ownerName}.Slot`;
+  return Slot2;
+}
+var Slot = /* @__PURE__ */ createSlot("Slot");
+// @__NO_SIDE_EFFECTS__
+function createSlotClone(ownerName) {
+  const SlotClone = reactExports.forwardRef((props, forwardedRef) => {
+    let { children, ...slotProps } = props;
+    if (isLazyComponent(children) && typeof use === "function") {
+      children = use(children._payload);
+    }
+    if (reactExports.isValidElement(children)) {
+      const childrenRef = getElementRef(children);
+      const props2 = mergeProps(slotProps, children.props);
+      if (children.type !== reactExports.Fragment) {
+        props2.ref = forwardedRef ? composeRefs(forwardedRef, childrenRef) : childrenRef;
+      }
+      return reactExports.cloneElement(children, props2);
+    }
+    return reactExports.Children.count(children) > 1 ? reactExports.Children.only(null) : null;
+  });
+  SlotClone.displayName = `${ownerName}.SlotClone`;
+  return SlotClone;
+}
+var SLOTTABLE_IDENTIFIER = Symbol("radix.slottable");
+function isSlottable(child) {
+  return reactExports.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
+}
+function mergeProps(slotProps, childProps) {
+  const overrideProps = { ...childProps };
+  for (const propName in childProps) {
+    const slotPropValue = slotProps[propName];
+    const childPropValue = childProps[propName];
+    const isHandler = /^on[A-Z]/.test(propName);
+    if (isHandler) {
+      if (slotPropValue && childPropValue) {
+        overrideProps[propName] = (...args) => {
+          const result = childPropValue(...args);
+          slotPropValue(...args);
+          return result;
+        };
+      } else if (slotPropValue) {
+        overrideProps[propName] = slotPropValue;
+      }
+    } else if (propName === "style") {
+      overrideProps[propName] = { ...slotPropValue, ...childPropValue };
+    } else if (propName === "className") {
+      overrideProps[propName] = [slotPropValue, childPropValue].filter(Boolean).join(" ");
+    }
+  }
+  return { ...slotProps, ...overrideProps };
+}
+function getElementRef(element) {
+  var _a3, _b3;
+  let getter = (_a3 = Object.getOwnPropertyDescriptor(element.props, "ref")) == null ? void 0 : _a3.get;
+  let mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+  if (mayWarn) {
+    return element.ref;
+  }
+  getter = (_b3 = Object.getOwnPropertyDescriptor(element, "ref")) == null ? void 0 : _b3.get;
+  mayWarn = getter && "isReactWarning" in getter && getter.isReactWarning;
+  if (mayWarn) {
+    return element.props.ref;
+  }
+  return element.props.ref || element.ref;
+}
+const falsyToString = (value) => typeof value === "boolean" ? `${value}` : value === 0 ? "0" : value;
+const cx = clsx;
+const cva = (base, config) => (props) => {
+  var _config_compoundVariants;
+  if ((config === null || config === void 0 ? void 0 : config.variants) == null) return cx(base, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
+  const { variants, defaultVariants } = config;
+  const getVariantClassNames = Object.keys(variants).map((variant) => {
+    const variantProp = props === null || props === void 0 ? void 0 : props[variant];
+    const defaultVariantProp = defaultVariants === null || defaultVariants === void 0 ? void 0 : defaultVariants[variant];
+    if (variantProp === null) return null;
+    const variantKey = falsyToString(variantProp) || falsyToString(defaultVariantProp);
+    return variants[variant][variantKey];
+  });
+  const propsWithoutUndefined = props && Object.entries(props).reduce((acc, param) => {
+    let [key, value] = param;
+    if (value === void 0) {
+      return acc;
+    }
+    acc[key] = value;
+    return acc;
+  }, {});
+  const getCompoundVariantClassNames = config === null || config === void 0 ? void 0 : (_config_compoundVariants = config.compoundVariants) === null || _config_compoundVariants === void 0 ? void 0 : _config_compoundVariants.reduce((acc, param) => {
+    let { class: cvClass, className: cvClassName, ...compoundVariantOptions } = param;
+    return Object.entries(compoundVariantOptions).every((param2) => {
+      let [key, value] = param2;
+      return Array.isArray(value) ? value.includes({
+        ...defaultVariants,
+        ...propsWithoutUndefined
+      }[key]) : {
+        ...defaultVariants,
+        ...propsWithoutUndefined
+      }[key] === value;
+    }) ? [
+      ...acc,
+      cvClass,
+      cvClassName
+    ] : acc;
+  }, []);
+  return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
+};
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
@@ -28965,51 +29102,11 @@ function Button({
     }
   );
 }
-function useActiveSection(sectionIds, rootMargin = "-20% 0px -60% 0px") {
-  const [activeId, setActiveId] = reactExports.useState(sectionIds[0] ?? "");
-  reactExports.useEffect(() => {
-    if (sectionIds.length === 0) return;
-    const observers = [];
-    for (const id of sectionIds) {
-      const el = document.getElementById(id);
-      if (!el) continue;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) {
-              setActiveId(id);
-            }
-          }
-        },
-        { rootMargin }
-      );
-      observer.observe(el);
-      observers.push(observer);
-    }
-    return () => {
-      for (const obs of observers) {
-        obs.disconnect();
-      }
-    };
-  }, [sectionIds, rootMargin]);
-  return activeId;
-}
 const COMPANY_CONTACT = {
   phone: "+91 78690-91028",
   email: "pdh.tech.consultancy@gmail.com",
-  address: "Plot No. 9A, Industrial State, Near Chhawni Chowk, Nandani Road, Bhilai, Durg - 490023, Chhattisgarh, India"
+  address: "2nd floor, tiranga bhawan, junwani Road, near Aman dhaba, bhilai, durg (C.G.)-490023"
 };
-const TOC_ITEMS = [
-  { id: "company-profile", label: "Company Profile" },
-  { id: "why-choose-us", label: "Why Choose Us" },
-  { id: "what-we-do", label: "What We Do" },
-  { id: "services", label: "Services" },
-  { id: "projects", label: "Projects" },
-  { id: "fleet", label: "Fleet of Machines" },
-  { id: "case-studies", label: "Case Studies" },
-  { id: "gallery", label: "Gallery", icon: "🖼️" },
-  { id: "feedback", label: "Feedback" }
-];
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -29115,7 +29212,7 @@ const createLucideIcon = (iconName, iconNode) => {
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$6 = [
+const __iconNode$7 = [
   [
     "path",
     {
@@ -29125,15 +29222,26 @@ const __iconNode$6 = [
   ],
   ["circle", { cx: "12", cy: "8", r: "6", key: "1vp47v" }]
 ];
-const Award = createLucideIcon("award", __iconNode$6);
+const Award = createLucideIcon("award", __iconNode$7);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
-const __iconNode$5 = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
-const ChevronUp = createLucideIcon("chevron-up", __iconNode$5);
+const __iconNode$6 = [["path", { d: "m18 15-6-6-6 6", key: "153udz" }]];
+const ChevronUp = createLucideIcon("chevron-up", __iconNode$6);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$5 = [
+  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+];
+const Mail = createLucideIcon("mail", __iconNode$5);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -29141,17 +29249,6 @@ const ChevronUp = createLucideIcon("chevron-up", __iconNode$5);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$4 = [
-  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
-  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
-];
-const Mail = createLucideIcon("mail", __iconNode$4);
-/**
- * @license lucide-react v0.511.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-const __iconNode$3 = [
   [
     "path",
     {
@@ -29161,7 +29258,19 @@ const __iconNode$3 = [
   ],
   ["circle", { cx: "12", cy: "10", r: "3", key: "ilqhr7" }]
 ];
-const MapPin = createLucideIcon("map-pin", __iconNode$3);
+const MapPin = createLucideIcon("map-pin", __iconNode$4);
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const __iconNode$3 = [
+  ["path", { d: "M4 12h16", key: "1lakjw" }],
+  ["path", { d: "M4 18h16", key: "19g7jn" }],
+  ["path", { d: "M4 6h16", key: "1o0s65" }]
+];
+const Menu = createLucideIcon("menu", __iconNode$3);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -29169,11 +29278,9 @@ const MapPin = createLucideIcon("map-pin", __iconNode$3);
  * See the LICENSE file in the root directory of this source tree.
  */
 const __iconNode$2 = [
-  ["path", { d: "M4 12h16", key: "1lakjw" }],
-  ["path", { d: "M4 18h16", key: "19g7jn" }],
-  ["path", { d: "M4 6h16", key: "1o0s65" }]
+  ["path", { d: "M7.9 20A9 9 0 1 0 4 16.1L2 22Z", key: "vv11sd" }]
 ];
-const Menu = createLucideIcon("menu", __iconNode$2);
+const MessageCircle = createLucideIcon("message-circle", __iconNode$2);
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -29202,10 +29309,34 @@ const __iconNode = [
 ];
 const X = createLucideIcon("x", __iconNode);
 const NAV_LINKS = [
-  { href: "#company-profile", label: "About" },
+  { href: "#company-profile", label: "About Us" },
   { href: "#services", label: "Services" },
   { href: "#projects", label: "Projects" },
-  { href: "#case-studies", label: "Case Studies" }
+  { href: "#gallery", label: "Gallery" },
+  { href: "#feedback", label: "Feedback" }
+];
+const SERVICE_CATEGORIES = [
+  "CHP & Conveyors",
+  "Industrial Equipments",
+  "Building & Structures",
+  "Pipeline & Trenchless",
+  "Urban Infrastructure",
+  "Pavement Management"
+];
+const FOOTER_LINKS = [
+  { href: "#company-profile", label: "About Us" },
+  { href: "#services", label: "Services" },
+  { href: "#projects", label: "Projects" },
+  { href: "#gallery", label: "Gallery" },
+  { href: "#feedback", label: "Feedback" },
+  { href: "#contact", label: "Contact" }
+];
+const CERTIFICATIONS = [
+  { label: "ISO 9001:2015", highlight: true },
+  { label: "EPF Registered", highlight: false },
+  { label: "ESIC Registered", highlight: false },
+  { label: "MSME Registered", highlight: false },
+  { label: "Coal India Approved", highlight: false }
 ];
 function scrollToSection(id) {
   const el = document.getElementById(id);
@@ -29213,56 +29344,25 @@ function scrollToSection(id) {
 }
 function Layout({ children }) {
   const [mobileOpen, setMobileOpen] = reactExports.useState(false);
-  const sectionIds = TOC_ITEMS.map((t) => t.id);
-  const activeId = useActiveSection(sectionIds);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen flex flex-col bg-background", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-navy text-inverse text-xs py-1.5 px-4 hidden md:block", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto flex justify-between items-center gap-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-6", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "a",
-          {
-            href: `tel:${COMPANY_CONTACT.phone}`,
-            className: "flex items-center gap-1.5 hover:text-accent-teal transition-colors",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { size: 11 }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: COMPANY_CONTACT.phone })
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          "a",
-          {
-            href: `mailto:${COMPANY_CONTACT.email}`,
-            className: "flex items-center gap-1.5 hover:text-accent-teal transition-colors",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Mail, { size: 11 }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: COMPANY_CONTACT.email })
-            ]
-          }
-        )
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 text-muted-foreground", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { size: 11 }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-xs", children: "Bhilai, Durg – 490023, Chhattisgarh" })
-      ] })
-    ] }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("header", { className: "sticky top-0 z-50 bg-card border-b border-border shadow-elevated", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "button",
           {
             type: "button",
             onClick: () => scrollToSection("company-profile"),
-            className: "flex items-center gap-3 group",
-            "aria-label": "Perfect Solution – go to top",
+            className: "flex items-center gap-3 group shrink-0",
+            "aria-label": "Perfect Designing Hub – go to top",
+            "data-ocid": "header.logo",
             children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-10 h-10 bg-navy rounded-sm flex items-center justify-center text-inverse font-display font-bold text-lg leading-none relative overflow-hidden", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-9 h-9 sm:w-10 sm:h-10 bg-navy rounded flex items-center justify-center text-inverse font-display font-bold text-lg leading-none relative overflow-hidden shrink-0", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "relative z-10", children: "P" }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 right-0 w-4 h-4 gradient-primary opacity-70" })
               ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "leading-tight", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-display font-bold text-foreground text-base group-hover:text-accent-teal transition-colors", children: "Perfect" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-muted-foreground text-[10px] font-body tracking-wide uppercase", children: "Solution" })
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-display font-bold text-foreground text-sm sm:text-base group-hover:text-accent-teal transition-colors whitespace-nowrap", children: "Perfect Designing Hub" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-muted-foreground text-[9px] sm:text-[10px] font-body tracking-wide uppercase", children: "Engineering & Consultancy" })
               ] })
             ]
           }
@@ -29270,7 +29370,7 @@ function Layout({ children }) {
         /* @__PURE__ */ jsxRuntimeExports.jsxs(
           "nav",
           {
-            className: "hidden md:flex items-center gap-1",
+            className: "hidden lg:flex items-center gap-0.5 xl:gap-1",
             "aria-label": "Main navigation",
             children: [
               NAV_LINKS.map((link) => /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -29278,131 +29378,83 @@ function Layout({ children }) {
                 {
                   type: "button",
                   onClick: () => scrollToSection(link.href.slice(1)),
-                  className: "px-3 py-2 text-sm font-body text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded transition-smooth",
+                  className: "px-2.5 xl:px-3 py-2 text-sm font-body text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded transition-smooth whitespace-nowrap",
+                  "data-ocid": `nav.${link.label.toLowerCase().replace(/\s+/g, "-")}`,
                   children: link.label
                 },
                 link.href
               )),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 Button,
                 {
                   size: "sm",
-                  className: "ml-3 bg-primary text-primary-foreground hover:bg-primary/90 font-body",
-                  onClick: () => scrollToSection("company-profile"),
-                  "data-ocid": "header-cta",
-                  children: "Get in Touch"
+                  className: "ml-2 bg-primary text-primary-foreground hover:bg-primary/90 font-body whitespace-nowrap",
+                  onClick: () => scrollToSection("contact"),
+                  "data-ocid": "header.contact_cta",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { size: 13, className: "mr-1.5" }),
+                    "Contact Us"
+                  ]
                 }
-              )
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(NetworkStatusIndicator, {})
             ]
           }
         ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "hidden sm:flex lg:hidden items-center gap-3", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "a",
+            {
+              href: `tel:${COMPANY_CONTACT.phone}`,
+              className: "flex items-center gap-1.5 text-xs text-muted-foreground hover:text-accent-teal transition-colors",
+              "data-ocid": "header.phone_link",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { size: 13 }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: COMPANY_CONTACT.phone })
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              className: "p-2 rounded text-foreground hover:bg-muted/60 border border-border",
+              onClick: () => setMobileOpen(!mobileOpen),
+              "aria-label": mobileOpen ? "Close menu" : "Open menu",
+              "aria-expanded": mobileOpen,
+              "data-ocid": "mobile.menu_toggle",
+              children: mobileOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 20 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { size: 20 })
+            }
+          )
+        ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
           {
             type: "button",
-            className: "md:hidden p-2 rounded text-foreground hover:bg-muted/60",
+            className: "sm:hidden p-2 rounded text-foreground hover:bg-muted/60",
             onClick: () => setMobileOpen(!mobileOpen),
             "aria-label": mobileOpen ? "Close menu" : "Open menu",
             "aria-expanded": mobileOpen,
-            "data-ocid": "mobile-menu-toggle",
+            "data-ocid": "mobile.menu_toggle",
             children: mobileOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(X, { size: 22 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Menu, { size: 22 })
           }
         )
       ] }),
-      mobileOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "md:hidden border-t border-border bg-card px-4 pb-4 pt-2", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-muted-foreground mb-3 flex gap-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "a",
-            {
-              href: `tel:${COMPANY_CONTACT.phone}`,
-              className: "hover:text-accent-teal",
-              children: COMPANY_CONTACT.phone
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "a",
-            {
-              href: `mailto:${COMPANY_CONTACT.email}`,
-              className: "hover:text-accent-teal",
-              children: COMPANY_CONTACT.email
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "flex flex-col gap-1", children: [
-          NAV_LINKS.map((link) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "button",
-            {
-              type: "button",
-              onClick: () => {
-                scrollToSection(link.href.slice(1));
-                setMobileOpen(false);
-              },
-              className: "text-left px-3 py-2.5 text-sm font-body text-foreground hover:bg-muted/60 rounded transition-smooth",
-              children: link.label
-            },
-            link.href
-          )),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Button,
-            {
-              className: "mt-2 bg-primary text-primary-foreground",
-              onClick: () => {
-                scrollToSection("company-profile");
-                setMobileOpen(false);
-              },
-              "data-ocid": "mobile-cta",
-              children: "Get in Touch"
-            }
-          )
-        ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 gap-8 pt-8 pb-12", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "aside",
+      mobileOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "div",
         {
-          className: "hidden xl:block w-52 shrink-0",
-          "aria-label": "Table of contents",
-          children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sticky top-24 bg-card border border-border rounded-lg shadow-card p-4", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[11px] font-body font-semibold uppercase tracking-widest text-muted-foreground mb-3", children: "Contents" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("nav", { className: "flex flex-col gap-0.5", children: TOC_ITEMS.map((item, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              "button",
-              {
-                type: "button",
-                onClick: () => scrollToSection(item.id),
-                className: `text-left text-sm px-3 py-2 rounded transition-smooth flex items-center gap-2 ${activeId === item.id ? "bg-primary/10 text-accent-teal font-medium border-l-2 border-accent-teal" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"}`,
-                "data-ocid": `toc-${item.id}`,
-                children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] font-mono text-muted-foreground/60 w-4", children: i + 1 }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: item.label })
-                ]
-              },
-              item.id
-            )) })
-          ] })
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1 min-w-0", id: "main-content", children })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("footer", { className: "bg-navy text-inverse border-t border-border/20", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 py-10", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-8 mb-8", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-display font-bold text-xl mb-2 text-accent-teal", children: "Perfect" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm text-inverse/70 font-body mb-3", children: "Solution" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-inverse/50 leading-relaxed", children: "ISO certified engineering and strategic consultancy. 8+ years delivering excellence in civil, structural, MEP, and environmental engineering." })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-body font-semibold text-sm mb-3 text-inverse/80", children: "Contact" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-2 text-xs text-inverse/60", children: [
+          className: "lg:hidden border-t border-border bg-card",
+          "data-ocid": "mobile.nav_drawer",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 py-3 bg-muted/40 flex flex-wrap gap-x-5 gap-y-1.5 text-xs border-b border-border", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs(
                 "a",
                 {
                   href: `tel:${COMPANY_CONTACT.phone}`,
-                  className: "flex items-center gap-2 hover:text-accent-teal transition-colors",
+                  className: "flex items-center gap-1.5 text-muted-foreground hover:text-accent-teal transition-colors",
                   children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { size: 12 }),
-                    COMPANY_CONTACT.phone
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: COMPANY_CONTACT.phone })
                   ]
                 }
               ),
@@ -29410,81 +29462,268 @@ function Layout({ children }) {
                 "a",
                 {
                   href: `mailto:${COMPANY_CONTACT.email}`,
-                  className: "flex items-center gap-2 hover:text-accent-teal transition-colors",
+                  className: "flex items-center gap-1.5 text-muted-foreground hover:text-accent-teal transition-colors",
                   children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx(Mail, { size: 12 }),
-                    COMPANY_CONTACT.email
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "truncate max-w-[200px]", children: COMPANY_CONTACT.email })
                   ]
                 }
-              ),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { size: 12, className: "mt-0.5 shrink-0" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "leading-relaxed", children: COMPANY_CONTACT.address })
+              )
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "flex flex-col px-3 py-3 gap-1", children: [
+              NAV_LINKS.map((link) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: () => {
+                    scrollToSection(link.href.slice(1));
+                    setMobileOpen(false);
+                  },
+                  className: "text-left px-4 py-3 text-sm font-body text-foreground hover:bg-muted/60 hover:text-accent-teal rounded-lg transition-smooth min-h-[44px] flex items-center",
+                  "data-ocid": `mobile.nav.${link.label.toLowerCase().replace(/\s+/g, "-")}`,
+                  children: link.label
+                },
+                link.href
+              )),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-2 flex gap-2", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  Button,
+                  {
+                    className: "flex-1 bg-primary text-primary-foreground min-h-[44px]",
+                    onClick: () => {
+                      scrollToSection("contact");
+                      setMobileOpen(false);
+                    },
+                    "data-ocid": "mobile.contact_cta",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(Phone, { size: 15, className: "mr-2" }),
+                      "Contact Us"
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Button,
+                  {
+                    variant: "outline",
+                    className: "flex-1 min-h-[44px] border-whatsapp text-whatsapp hover:bg-whatsapp/10",
+                    asChild: true,
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                      "a",
+                      {
+                        href: "https://wa.me/917869091028",
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        "data-ocid": "mobile.whatsapp_cta",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx(MessageCircle, { size: 15, className: "mr-2" }),
+                          "WhatsApp"
+                        ]
+                      }
+                    )
+                  }
+                )
+              ] })
+            ] })
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("main", { className: "flex-1", id: "main-content", children }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "footer",
+      {
+        className: "bg-navy text-inverse border-t border-border/20",
+        id: "contact",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-6", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sm:col-span-2 lg:col-span-1", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-4", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-10 h-10 bg-primary/20 rounded flex items-center justify-center shrink-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-display font-bold text-accent-teal text-xl", children: "P" }) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-display font-bold text-base text-inverse", children: "Perfect Designing Hub" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] text-inverse/50 uppercase tracking-wider", children: "Engineering & Consultancy" })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-inverse/55 leading-relaxed mb-4", children: "Premier engineering and strategic consultancy firm based in Bhilai, Chhattisgarh. ISO 9001:2015 certified, delivering precision since 2018." }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 text-accent-teal text-xs font-body font-semibold", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Award, { size: 14 }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "ISO 9001:2015 Certified" })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-body font-semibold text-sm mb-4 text-inverse/90 uppercase tracking-wide", children: "Quick Links" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "flex flex-col gap-2", children: [
+                  FOOTER_LINKS.map((link) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      type: "button",
+                      onClick: () => scrollToSection(link.href.slice(1)),
+                      className: "text-xs text-inverse/60 hover:text-accent-teal transition-colors text-left min-h-[28px] flex items-center",
+                      "data-ocid": `footer.link.${link.label.toLowerCase().replace(/\s+/g, "-")}`,
+                      children: link.label
+                    }
+                  ) }, link.href)),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "a",
+                    {
+                      href: "/gallery",
+                      className: "text-xs text-inverse/60 hover:text-accent-teal transition-colors min-h-[28px] flex items-center",
+                      "data-ocid": "footer.link.gallery-page",
+                      children: "Full Gallery"
+                    }
+                  ) })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-body font-semibold text-sm mb-4 text-inverse/90 uppercase tracking-wide", children: "Our Services" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "flex flex-col gap-2", children: SERVICE_CATEGORIES.map((svc) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => scrollToSection("services"),
+                    className: "text-xs text-inverse/60 hover:text-accent-teal transition-colors text-left min-h-[28px] flex items-center gap-1.5",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "w-1 h-1 rounded-full bg-accent-teal/60 shrink-0" }),
+                      svc
+                    ]
+                  }
+                ) }, svc)) })
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-body font-semibold text-sm mb-4 text-inverse/90 uppercase tracking-wide", children: "Contact Us" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "flex flex-col gap-3", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "a",
+                    {
+                      href: `tel:${COMPANY_CONTACT.phone}`,
+                      className: "flex items-start gap-2.5 text-xs text-inverse/60 hover:text-accent-teal transition-colors group",
+                      "data-ocid": "footer.phone_link",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          Phone,
+                          {
+                            size: 13,
+                            className: "mt-0.5 shrink-0 group-hover:text-accent-teal"
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: COMPANY_CONTACT.phone })
+                      ]
+                    }
+                  ) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "a",
+                    {
+                      href: `mailto:${COMPANY_CONTACT.email}`,
+                      className: "flex items-start gap-2.5 text-xs text-inverse/60 hover:text-accent-teal transition-colors group",
+                      "data-ocid": "footer.email_link",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(
+                          Mail,
+                          {
+                            size: 13,
+                            className: "mt-0.5 shrink-0 group-hover:text-accent-teal"
+                          }
+                        ),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "break-words", children: COMPANY_CONTACT.email })
+                      ]
+                    }
+                  ) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-2.5 text-xs text-inverse/60", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { size: 13, className: "mt-0.5 shrink-0" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "leading-relaxed", children: COMPANY_CONTACT.address })
+                  ] }) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "a",
+                    {
+                      href: "https://wa.me/917869091028",
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      className: "inline-flex items-center gap-2 mt-1 px-4 py-2 rounded-lg bg-whatsapp/15 text-whatsapp text-xs font-semibold hover:bg-whatsapp/25 transition-colors min-h-[40px]",
+                      "data-ocid": "footer.whatsapp_link",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(MessageCircle, { size: 14 }),
+                        "Chat on WhatsApp"
+                      ]
+                    }
+                  ) }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                    "a",
+                    {
+                      href: "https://maps.google.com/?q=2nd+floor+Tiranga+Bhawan+Junwani+Road+Bhilai+Durg+Chhattisgarh",
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      className: "inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/15 text-accent-teal text-xs font-semibold hover:bg-primary/25 transition-colors min-h-[40px]",
+                      "data-ocid": "footer.directions_link",
+                      children: [
+                        /* @__PURE__ */ jsxRuntimeExports.jsx(MapPin, { size: 14 }),
+                        "Get Directions"
+                      ]
+                    }
+                  ) })
+                ] })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t border-inverse/10 pt-5 pb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap items-center justify-center gap-x-4 gap-y-2", children: CERTIFICATIONS.map((cert, i) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
+              i > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-inverse/20 hidden sm:inline", children: "|" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                "span",
+                {
+                  className: `text-xs font-body flex items-center gap-1 ${cert.highlight ? "text-accent-teal font-semibold" : "text-inverse/50"}`,
+                  children: [
+                    cert.highlight && /* @__PURE__ */ jsxRuntimeExports.jsx(Award, { size: 12 }),
+                    cert.label
+                  ]
+                }
+              )
+            ] }, cert.label)) }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-inverse/10 pt-4 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-inverse/40", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                "© ",
+                (/* @__PURE__ */ new Date()).getFullYear(),
+                " Perfect Designing Hub. All rights reserved."
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "a",
+                  {
+                    href: "/admin",
+                    className: "hover:text-accent-teal transition-colors underline-offset-2 hover:underline",
+                    "data-ocid": "footer.admin_link",
+                    children: "Admin"
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+                  "Built with love using",
+                  " ",
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "a",
+                    {
+                      href: `https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(typeof window !== "undefined" ? window.location.hostname : "")}`,
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      className: "hover:text-accent-teal transition-colors underline-offset-2 hover:underline",
+                      children: "caffeine.ai"
+                    }
+                  )
+                ] })
               ] })
             ] })
           ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-body font-semibold text-sm mb-3 text-inverse/80", children: "Quick Links" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 gap-1", children: TOC_ITEMS.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "button",
-              {
-                type: "button",
-                onClick: () => scrollToSection(item.id),
-                className: "text-left text-xs text-inverse/60 hover:text-accent-teal transition-colors py-0.5",
-                children: item.label
-              },
-              item.id
-            )) })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t border-inverse/10 pt-5 pb-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center justify-center gap-x-6 gap-y-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1.5 text-accent-teal text-xs font-body font-semibold", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Award, { size: 14 }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "ISO 9001:2015 Certified" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-inverse/20 hidden sm:inline", children: "|" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-inverse/50 text-xs font-body", children: "EPF Registered" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-inverse/20 hidden sm:inline", children: "|" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-inverse/50 text-xs font-body", children: "ESIC Registered" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-inverse/20 hidden sm:inline", children: "|" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-inverse/50 text-xs font-body", children: "MSME Registered" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-inverse/20 hidden sm:inline", children: "|" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-inverse/50 text-xs font-body", children: "Coal India Approved" })
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t border-inverse/10 pt-4 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-inverse/40", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-            "© ",
-            (/* @__PURE__ */ new Date()).getFullYear(),
-            " Perfect Solution. All rights reserved."
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-            "Built with love using",
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "a",
-              {
-                href: `https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(typeof window !== "undefined" ? window.location.hostname : "")}`,
-                target: "_blank",
-                rel: "noopener noreferrer",
-                className: "hover:text-accent-teal transition-colors underline-offset-2 hover:underline",
-                children: "caffeine.ai"
-              }
-            )
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          type: "button",
-          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
-          className: "fixed bottom-20 right-5 z-40 w-10 h-10 bg-navy border border-accent-teal/40 rounded-full flex items-center justify-center text-accent-teal hover:bg-primary/20 transition-smooth shadow-elevated",
-          "aria-label": "Back to top",
-          "data-ocid": "back-to-top",
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { size: 18 })
-        }
-      )
-    ] })
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+              className: "fixed bottom-20 right-5 z-40 w-10 h-10 bg-navy border border-accent-teal/40 rounded-full flex items-center justify-center text-accent-teal hover:bg-primary/20 transition-smooth shadow-elevated",
+              "aria-label": "Back to top",
+              "data-ocid": "back_to_top",
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronUp, { size: 18 })
+            }
+          )
+        ]
+      }
+    )
   ] });
 }
 function Skeleton({ className, ...props }) {
@@ -34710,44 +34949,50 @@ function RouterContextProvider({
 function RouterProvider({ router: router2, ...rest }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(RouterContextProvider, { router: router2, ...rest, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Matches, {}) });
 }
-const HomePage = reactExports.lazy(() => __vitePreload(() => import("./Home-B9jAlNnS.js"), true ? __vite__mapDeps([0,1]) : void 0));
-const GalleryPage = reactExports.lazy(() => __vitePreload(() => import("./GalleryPage-Dfhbo1k1.js"), true ? __vite__mapDeps([2,1]) : void 0));
+const HomePage = reactExports.lazy(() => __vitePreload(() => import("./Home-Pr1cjkBw.js"), true ? __vite__mapDeps([0,1,2,3]) : void 0));
+const GalleryPage = reactExports.lazy(() => __vitePreload(() => import("./GalleryPage-RvVXTJ28.js"), true ? __vite__mapDeps([4,2,3]) : void 0));
+const AdminPage = reactExports.lazy(() => __vitePreload(() => import("./AdminPage-DzdrBRBr.js"), true ? __vite__mapDeps([5,2,1]) : void 0));
 const SKELETON_IDS = ["sk-1", "sk-2", "sk-3", "sk-4"];
 function PageSkeleton() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-8", children: SKELETON_IDS.map((id) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 py-12 flex flex-col gap-8", children: SKELETON_IDS.map((id) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-8 w-48" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-full" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-4 w-3/4" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-3 gap-4 pt-2", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-2", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-32 rounded-lg" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-32 rounded-lg" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-32 rounded-lg" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-32 rounded-lg hidden sm:block" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Skeleton, { className: "h-32 rounded-lg hidden md:block" })
     ] })
   ] }, id)) });
 }
 const rootRoute = createRootRoute({ component: Outlet });
-const homeLayoutRoute = createRoute({
+const layoutRoute = createRoute({
   getParentRoute: () => rootRoute,
-  id: "home-layout",
+  id: "layout",
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Layout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(PageSkeleton, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) }) })
 });
 const indexRoute = createRoute({
-  getParentRoute: () => homeLayoutRoute,
+  getParentRoute: () => layoutRoute,
   path: "/",
   component: HomePage
 });
 const galleryRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => layoutRoute,
   path: "/gallery",
-  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(PageSkeleton, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(GalleryPage, {}) })
+  component: GalleryPage
+});
+const adminRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin",
+  component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(PageSkeleton, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(AdminPage, {}) })
 });
 const routeTree = rootRoute.addChildren([
-  homeLayoutRoute.addChildren([indexRoute]),
-  galleryRoute
+  layoutRoute.addChildren([indexRoute, galleryRoute]),
+  adminRoute
 ]);
 const router = createRouter({ routeTree });
 function App() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(RouterProvider, { router });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(NetworkStatusProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(RouterProvider, { router }) });
 }
 BigInt.prototype.toJSON = function() {
   return this.toString();
@@ -34757,80 +35002,80 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(InternetIdentityProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(App, {}) }) })
 );
 export {
-  ChevronUp as $,
-  timeoutManager as A,
-  focusManager as B,
-  Certificate as C,
-  fetchState as D,
+  isV2ResponseBody as $,
+  Award as A,
+  Button as B,
+  COMPANY_CONTACT as C,
+  RequestStatusDoneNoReplyErrorCode as D,
   ExternalError as E,
-  replaceData as F,
-  notifyManager as G,
-  HttpAgent as H,
+  RejectError as F,
+  CertifiedRejectErrorCode as G,
+  UNREACHABLE_ERROR as H,
   InputError as I,
-  hashKey as J,
-  getDefaultState as K,
-  reactExports as L,
-  MissingRootKeyErrorCode as M,
-  shouldThrowError as N,
-  useQueryClient as O,
-  ProtocolError as P,
-  QueryResponseStatus as Q,
+  InvalidReadStateRequestErrorCode as J,
+  ReadRequestType as K,
+  Link as L,
+  Mail as M,
+  Principal$1 as N,
+  IDL as O,
+  Phone as P,
+  MissingCanisterIdErrorCode as Q,
   RequestStatusResponseStatus as R,
-  Subscribable as S,
+  Skeleton as S,
   TimeoutWaitingForResponseErrorCode as T,
   UnknownError as U,
-  useInternetIdentity as V,
-  createActorWithConfig as W,
-  createLucideIcon as X,
-  TOC_ITEMS as Y,
-  useActiveSection as Z,
-  jsxRuntimeExports as _,
-  RequestStatusDoneNoReplyErrorCode as a,
-  Award as a0,
-  createSlot as a1,
-  cn as a2,
-  X as a3,
-  Button as a4,
-  Phone as a5,
-  COMPANY_CONTACT as a6,
-  Mail as a7,
-  MapPin as a8,
-  Record as a9,
-  Service as aa,
-  Func as ab,
-  Vec as ac,
-  Int as ad,
-  Text as ae,
-  Nat as af,
-  o as ag,
-  vt as ah,
-  Skeleton as ai,
-  Link as aj,
-  Slot as ak,
-  cva as al,
-  RejectError as b,
-  CertifiedRejectErrorCode as c,
-  UNREACHABLE_ERROR as d,
-  InvalidReadStateRequestErrorCode as e,
-  ReadRequestType as f,
-  Principal$1 as g,
-  IDL as h,
-  MissingCanisterIdErrorCode as i,
-  encode$2 as j,
-  UncertifiedRejectErrorCode as k,
-  lookupResultToBuffer as l,
-  isV3ResponseBody as m,
-  isV2ResponseBody as n,
-  UncertifiedRejectUpdateErrorCode as o,
-  UnexpectedErrorCode as p,
-  decode$2 as q,
-  pendingThenable as r,
-  resolveEnabled as s,
-  shallowEqualObjects as t,
-  utf8ToBytes as u,
-  resolveStaleTime as v,
-  noop$6 as w,
-  environmentManager as x,
-  isValidTimeout as y,
-  timeUntilStale as z
+  HttpAgent as V,
+  encode$2 as W,
+  X,
+  QueryResponseStatus as Y,
+  UncertifiedRejectErrorCode as Z,
+  isV3ResponseBody as _,
+  MapPin as a,
+  UncertifiedRejectUpdateErrorCode as a0,
+  UnexpectedErrorCode as a1,
+  decode$2 as a2,
+  pendingThenable as a3,
+  resolveEnabled as a4,
+  resolveStaleTime as a5,
+  environmentManager as a6,
+  isValidTimeout as a7,
+  timeUntilStale as a8,
+  timeoutManager as a9,
+  focusManager as aa,
+  fetchState as ab,
+  replaceData as ac,
+  createActorWithConfig as ad,
+  Record as ae,
+  Vec as af,
+  Service as ag,
+  Func as ah,
+  Text as ai,
+  Int as aj,
+  Nat as ak,
+  Bool as al,
+  useQueryClient as b,
+  createLucideIcon as c,
+  ChevronUp as d,
+  useInternetIdentity as e,
+  Subscribable as f,
+  getDefaultState as g,
+  hashKey as h,
+  noop$6 as i,
+  jsxRuntimeExports as j,
+  shouldThrowError as k,
+  Slot as l,
+  cn as m,
+  notifyManager as n,
+  cva as o,
+  createSlot as p,
+  o as q,
+  reactExports as r,
+  shallowEqualObjects as s,
+  ProtocolError as t,
+  useNetworkStatusContext as u,
+  vt as v,
+  utf8ToBytes as w,
+  MissingRootKeyErrorCode as x,
+  Certificate as y,
+  lookupResultToBuffer as z
 };

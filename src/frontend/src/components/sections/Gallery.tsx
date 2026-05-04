@@ -1,6 +1,7 @@
 import { createActor } from "@/backend";
 import type { ProjectItem } from "@/backend";
 import { Button } from "@/components/ui/button";
+import { getProjects } from "@/lib/offlineStorage";
 import { GALLERY_ITEMS, projectPhotosToGalleryItems } from "@/types/gallery";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery } from "@tanstack/react-query";
@@ -20,8 +21,44 @@ export function Gallery() {
     throwOnError: false,
   });
 
-  const projectGalleryItems = projectPhotosToGalleryItems(backendProjects);
-  const allItems = [...GALLERY_ITEMS, ...projectGalleryItems];
+  // Offline project photos
+  const { data: offlineGalleryItems = [] } = useQuery({
+    queryKey: ["offline-gallery-items"],
+    queryFn: () => {
+      const stored = getProjects();
+      const items: Array<{
+        id: string;
+        name: string;
+        qty: string;
+        imageUrl: string;
+      }> = [];
+      for (const project of stored) {
+        project.photoUrls.forEach((url, index) => {
+          items.push({
+            id: `offline-project-${project.id}-photo-${index}`,
+            name: project.name,
+            qty: "",
+            imageUrl: url,
+          });
+        });
+      }
+      return items;
+    },
+  });
+
+  const backendGalleryItems = projectPhotosToGalleryItems(backendProjects);
+
+  // Deduplicate offline items that may already appear in backendGalleryItems
+  const backendUrls = new Set(backendGalleryItems.map((i) => i.imageUrl));
+  const deduplicatedOffline = offlineGalleryItems.filter(
+    (i) => !backendUrls.has(i.imageUrl),
+  );
+
+  const allItems = [
+    ...GALLERY_ITEMS,
+    ...backendGalleryItems,
+    ...deduplicatedOffline,
+  ];
   const previewItems = allItems.slice(0, 6);
 
   return (

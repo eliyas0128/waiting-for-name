@@ -2,6 +2,7 @@ import { createActor } from "@/backend";
 import type { ProjectItem as BackendProjectItem } from "@/backend";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getProjects } from "@/lib/offlineStorage";
 import type { DisplayProject } from "@/types/index";
 import { useActor } from "@caffeineai/core-infrastructure";
 import { useQuery } from "@tanstack/react-query";
@@ -272,8 +273,38 @@ export function Projects() {
     throwOnError: false,
   });
 
-  // Hardcoded first, backend appended after
-  const allProjects = [...HARDCODED_PROJECTS, ...backendProjects];
+  // Merge offline projects (only those not yet synced to backend)
+  const { data: offlineProjects = [] } = useQuery<DisplayProject[]>({
+    queryKey: ["offline-projects"],
+    queryFn: () => {
+      const stored = getProjects();
+      // Exclude offline projects that already have a matching backend project
+      const backendTitles = new Set(backendProjects.map((p) => p.title));
+      return stored
+        .filter((p) => !p.synced && !backendTitles.has(p.name))
+        .map(
+          (p): DisplayProject => ({
+            id: `offline-${p.id}`,
+            title: p.name,
+            client: p.client,
+            location: p.location,
+            category: "Project",
+            year: p.year,
+            description: p.description,
+            photos: p.photoUrls,
+          }),
+        );
+    },
+    // Rerun whenever backendProjects changes
+    enabled: true,
+  });
+
+  // Hardcoded first, then backend, then offline
+  const allProjects = [
+    ...HARDCODED_PROJECTS,
+    ...backendProjects,
+    ...offlineProjects,
+  ];
   const visibleProjects = showAll
     ? allProjects
     : allProjects.slice(0, INITIAL_VISIBLE);

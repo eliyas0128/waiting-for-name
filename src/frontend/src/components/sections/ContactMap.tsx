@@ -107,7 +107,7 @@ export function ContactMap() {
             href="https://wa.me/917869091028"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 bg-[#25D366] hover:bg-[#20bb5a] text-white rounded-xl px-5 py-4 font-body font-semibold text-sm transition-smooth shadow-card"
+            className="flex items-center gap-3 bg-whatsapp hover:bg-whatsapp/80 text-white rounded-xl px-5 py-4 font-body font-semibold text-sm transition-smooth shadow-card"
             data-ocid="contact-whatsapp"
           >
             <svg

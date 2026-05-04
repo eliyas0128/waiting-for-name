@@ -49,6 +49,8 @@
     --sidebar-accent-foreground: 0.97 0 0;
     --sidebar-border: 0.26 0.03 215;
     --sidebar-ring: 0.52 0.18 196;
+
+    --whatsapp: oklch(72% 0.2 145);
   }
 
   .dark {

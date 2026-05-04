@@ -1,12 +1,21 @@
 import { AdminDashboard } from "@/components/admin/AdminDashboard";
 import { AdminLogin } from "@/components/admin/AdminLogin";
+import { OfflinePinAuth } from "@/components/admin/OfflinePinAuth";
+import { useNetworkStatusContext } from "@/context/NetworkStatusContext";
 import { useInternetIdentity } from "@caffeineai/core-infrastructure";
+import { useState } from "react";
 
 export default function AdminPage() {
   const { identity, isInitializing } = useInternetIdentity();
+  const {
+    isOnline,
+    isBackendReachable,
+    isChecking: networkChecking,
+  } = useNetworkStatusContext();
+  const [offlineAuthed, setOfflineAuthed] = useState(false);
 
   // While auth state is loading, show nothing (prevents flash)
-  if (isInitializing) {
+  if (isInitializing || networkChecking) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
@@ -19,8 +28,15 @@ export default function AdminPage() {
     );
   }
 
-  if (!identity) {
-    return <AdminLogin />;
+  // Online: use Internet Identity (existing behavior)
+  if (isOnline && isBackendReachable) {
+    if (!identity) return <AdminLogin />;
+    return <AdminDashboard />;
+  }
+
+  // Offline: use PIN auth
+  if (!offlineAuthed) {
+    return <OfflinePinAuth onSuccess={() => setOfflineAuthed(true)} />;
   }
 
   return <AdminDashboard />;

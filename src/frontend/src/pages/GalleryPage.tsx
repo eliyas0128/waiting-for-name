@@ -2,6 +2,7 @@ import { createActor } from "@/backend";
 import type { ProjectItem } from "@/backend";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getProjects } from "@/lib/offlineStorage";
 import {
   GALLERY_ITEMS,
   type GalleryItem,
@@ -65,8 +66,39 @@ export default function GalleryPage() {
     throwOnError: false,
   });
 
+  // Offline project photos
+  const { data: offlineGalleryItems = [] } = useQuery({
+    queryKey: ["offline-gallery-items"],
+    queryFn: () => {
+      const stored = getProjects();
+      const items: GalleryItem[] = [];
+      for (const project of stored) {
+        project.photoUrls.forEach((url, index) => {
+          items.push({
+            id: `offline-project-${project.id}-photo-${index}`,
+            name: project.name,
+            qty: "",
+            imageUrl: url,
+          });
+        });
+      }
+      return items;
+    },
+  });
+
   const projectGalleryItems = projectPhotosToGalleryItems(backendProjects);
-  const allItems = [...GALLERY_ITEMS, ...projectGalleryItems];
+
+  // Deduplicate offline items already present in backend gallery
+  const backendUrls = new Set(projectGalleryItems.map((i) => i.imageUrl));
+  const deduplicatedOffline = offlineGalleryItems.filter(
+    (i) => !backendUrls.has(i.imageUrl),
+  );
+
+  const allItems = [
+    ...GALLERY_ITEMS,
+    ...projectGalleryItems,
+    ...deduplicatedOffline,
+  ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -118,6 +150,9 @@ export default function GalleryPage() {
             <GalleryCard key={item.id} item={item} />
           ))
         )}
+        {deduplicatedOffline.map((item) => (
+          <GalleryCard key={item.id} item={item} />
+        ))}
       </div>
 
       {/* Footer note */}
